@@ -6,7 +6,7 @@ const sequelize: Sequelize = require('./index');
  * 导出主页大图的对象类型
  */
 export interface bigPicDAOType {
-    imgSrc: string
+    imgsrc: string
 }
 
 /**

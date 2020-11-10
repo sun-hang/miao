@@ -11,13 +11,18 @@ export interface ProductDAOType {
     adImgSrc: string
     synopsis: string
     synopsisImgSrc: string
+    tag: string
     // productDataId: number
-    detail: string
+    detail?: string
 }
 
 export const ProductDAO: ModelCtor<Model> = sequelize.define('product', {
     // 产品名称
     productName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    tag: {
         type: DataTypes.STRING,
         allowNull: false
     },

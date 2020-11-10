@@ -2,6 +2,7 @@
 /**
  * 导入操作对象和数据类型接口
  */
+
 import { BigPicDAO, bigPicDAOType } from '../dao/bigPicDAO';
 
 // 增
@@ -9,22 +10,16 @@ import { BigPicDAO, bigPicDAOType } from '../dao/bigPicDAO';
 /**
  * 增加一个
  */
-export const addOne = async (data: bigPicDAOType) => {
+export const addOne = async (data: bigPicDAOType): Promise<bigPicDAOType> => {
     const result = await BigPicDAO.create(data);
-    if (result) {
-        return result.toJSON();
-    }
-    return null;
+    return result.toJSON() as bigPicDAOType;
 }
 /**
  * 增加多个
  */
-export const addMore = async (datas: bigPicDAOType[]) => {
+export const addMore = async (datas: bigPicDAOType[]): Promise<bigPicDAOType[]> => {
     const result = await BigPicDAO.bulkCreate(datas);
-    if (result.length > 0) {
-        return result;
-    }
-    return [];
+    return JSON.parse(JSON.stringify(result));
 }
 
 // 刪
@@ -32,7 +27,7 @@ export const addMore = async (datas: bigPicDAOType[]) => {
 /**
  * 删除一个
  */
-export const removeOne = async (id: number) => {
+export const removeOne = async (id: number): Promise<number> => {
     const result = await BigPicDAO.destroy({
         where: {
             id
@@ -44,7 +39,7 @@ export const removeOne = async (id: number) => {
  * 删除多个
  */
 
-export const removeMore = async (ids: number[]) => {
+export const removeMore = async (ids: number[]): Promise<number> => {
     let count = 0;
     await Promise.all(ids.map(async (item, index) => {
         const res = await removeOne(item);
@@ -71,22 +66,28 @@ export const update = async (id: number, data = {}) => {
 /**
  * 查询所有
  */
-export const findAll = async () => {
-    return await BigPicDAO.findAll();
+export const findAll = async (): Promise<bigPicDAOType[]> => {
+    const result = await BigPicDAO.findAll();
+    return JSON.parse(JSON.stringify(result));
 }
 /**
 * 查询一个
 */
-export const findById = async (id: number) => {
-    return await BigPicDAO.findByPk(id);
+export const findById = async (id: number): Promise<bigPicDAOType | null> => {
+    const result = await BigPicDAO.findByPk(id);
+    if (result) {
+        return result.toJSON() as bigPicDAOType;
+    }
+    return null;
 }
 /**
  * 查询最新一条
  */
-export const findByNewOne = async () => {
+export const findByNewOne = async (): Promise<bigPicDAOType[]> => {
     const result = await BigPicDAO.findAll({
         limit: 1,
         offset: 0,
-        order: "DESC"
+        order: [['id', 'DESC']]
     })
+    return JSON.parse(JSON.stringify(result));
 }

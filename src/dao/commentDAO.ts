@@ -2,11 +2,11 @@ import { Model, ModelCtor, Sequelize,DataTypes } from "sequelize";
 // 评论广告表
 const sequelize: Sequelize = require('./index');
 export interface commentDAOType {
-    userid: number
-    username: string
+    userid?: number
+    username?: string
     content: string
     imgs: string
-    productid: number | null
+    productid?: number | null
     ctime: number
     id?: number
     deletedAt: string | null
