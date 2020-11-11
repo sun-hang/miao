@@ -10,6 +10,7 @@ const router: Router = Router();
  */
 router.get('/', async (req, res, next) => {
     const result = await findAll();
+    console.log(req.session)
     res.json(getResObj(200, "请求成功", result));
 })
 
@@ -44,8 +45,8 @@ function verify(item: userAdminDAOType) {
         return '邮箱格式不正确';
     }
 
-    if (!item.imgsrc) {
-        return '图片地址不存在';
+    if (!item.imgsrc && !/^.+(\.jpg|\.png|\.jpeg|\.gif)/.test(item.imgsrc)) {
+        return '图片地址不存在或格式不对';
     }
 
     if (!item.phone || !/^1[345678]{1}\d{9}$/.test(item.phone)) {
@@ -64,31 +65,38 @@ function verify(item: userAdminDAOType) {
  */
 router.post('/', async (req, res, next) => {
     let data = req.body.data;
+    let arr: userAdminDAOType[] = [];
     if (Array.isArray(data)) {
-        data = data.filter(async (item) => {
+        for (let i = 0; i < data.length - 1; i++) {
+            for (let j = i + 1; j < data.length; j++) {
+                if (data[i].loginUser === data[j].loginUser && data[i] != undefined) {
+                    data[i] = undefined;
+                }
+            }
+        }
+        await Promise.all(data.map(async (item) => {
+            if (!item) {
+                return
+            }
             let v = verify(item);
             let t = await findByName(item.loginUser);
-            return !v && t.length > 0;
-        })
-        data = data.map((item: userAdminDAOType) => {
-            return {
-                ...item,
-                loginPassword: md5(item.loginPassword)
+            if (!v && t.length < 1) {
+                let result = await addOne({ ...item, loginPassword: md5(item.loginPassword) });
+                arr.push(result);
             }
-        })
-        const result = await addMore(data);
-        res.json(getResObj(200, '添加成功', result))
+        }))
+        res.json(getResObj(200, '添加成功', arr))
     } else {
-
         data = {
             loginUser: req.body.loginUser,
-            loginPassword: md5(req.body.loginPassword),
+            loginPassword: req.body.loginPassword,
             email: req.body.email,
             imgsrc: req.body.imgsrc,
             phone: req.body.phone,
             sex: req.body.sex
         }
         if (!verify(data)) {
+            data.loginPassword = md5(req.body.loginPassword);
             const resu = await findByName(data.loginUser);
             if (resu.length > 0) {
                 res.json(getResObj(200, '用户已存在', null))
@@ -123,11 +131,14 @@ router.post('/login', async (req, res, next) => {
         res.json(getResObj(200, '用户不存在', null))
         return;
     }
-
-    if (md5(result[0].loginPassword) !== md5(loginPassword)) {
+    if (result[0].loginPassword !== md5(loginPassword)) {
         res.json(getResObj(200, "密码不正确", null))
-    }else{
-        res.json(getResObj(200,"登录成功",result[0]))
+    } else {
+        let session: any = req.session;
+        session.user = result[0];
+        req.session = session;
+        result[0].loginPassword = '';
+        res.json(getResObj(200, "登录成功", result[0]))
     }
 })
 
@@ -135,21 +146,50 @@ router.post('/login', async (req, res, next) => {
  * 修改用户
  */
 router.put('/:id', async (req, res, next) => {
-
+    let id = parseInt(req.params.id);
+    if (!Object.is(NaN, id) && id > 0) {
+        if (req.body.loginUser) {
+            const result = await findByName(req.body.loginUser);
+            if (result.length > 0) {
+                res.json(getResObj(200, "用户名已存在", null));
+                return;
+            }
+        }
+        const result = await updata(id, req.body);
+        res.json(getResObj(200, "修改成功", result));
+    } else {
+        res.json(getResObj(200, "id非数字或id不在取值范围", null))
+    }
 })
 
 /**
  * 删除多个
  */
 router.delete('/', async (req, res, next) => {
-
+    let data = req.body.data;
+    if (Array.isArray(data)) {
+        data = data.filter((item) => {
+            return typeof item === 'number' && !Object.is(NaN, item) && item > 0
+        })
+        console.log(data)
+        const result = await removeMore(data);
+        res.json(getResObj(200, "删除成功", result))
+    } else {
+        res.json(getResObj(200, "参数不合法，请传入一个data的数字数组", null))
+    }
 })
 
 /**
  * 删除一个
  */
 router.delete('/:id', async (req, res, next) => {
-
+    let id = parseInt(req.params.id);
+    if (!Object.is(NaN, id) && id > 0) {
+        const result = await removeOne(id);
+        res.json(getResObj(200, "删除成功", result));
+    } else {
+        res.json(getResObj(200, "id非数字或id不在取值范围", null))
+    }
 })
 
 export default router;

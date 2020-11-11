@@ -45,6 +45,6 @@ export const UserAdminDAO: ModelCtor<Model> = sequelize.define('useradmin', {
     }
 }, {
     updatedAt: false,
-    deletedAt: false,
+    createdAt: false,
     paranoid: true
 })

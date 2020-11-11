@@ -46,8 +46,11 @@ app.use('/api/bigad', require('./api/bidAdApi').default)
 // 首屏大图的处理路由
 app.use('/api/bigpic', require('./api/bigPicApi').default)
 
-// 评论中间件
+// 评论处理路由
 app.use('/api/comment', require('./api/commentApi').default);
+
+// 用户处理路由
+app.use('/api/user', require('./api/userAdminApi').default);
 
 // 错误处理中间件
 app.use(require('./errorMiddleware').default)
