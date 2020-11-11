@@ -51,6 +51,10 @@ function verify(item: userAdminDAOType) {
     if (!item.phone || !/^1[345678]{1}\d{9}$/.test(item.phone)) {
         return '手机号格式不对';
     }
+
+    if (typeof item.sex !== 'boolean') {
+        return '参数不正确';
+    }
 }
 
 /**
@@ -59,7 +63,31 @@ function verify(item: userAdminDAOType) {
  * loginUser，loginPassword imgSrc：一个默认的 Email phone sex
  */
 router.post('/', async (req, res, next) => {
-
+    let data = req.body.data;
+    if (Array.isArray(data)) {
+        data = data.filter(async (item) => {
+            let v = verify(item);
+            let t = await findByName(item.loginUser);
+            return !v && t.length > 0;
+        })
+        const result = await addMore(data);
+        res.json(getResObj(200, '添加成功', result))
+    } else {
+        data = {
+            loginUser: req.body.loginUser,
+            loginPassword: req.body.loginPassword,
+            email: req.body.email,
+            imgsrc: req.body.imgsrc,
+            phone: req.body.phone,
+            sex: req.body.sex
+        }
+        if (!verify(data)) {
+            const result = await addOne(data);
+            res.json(getResObj(200, '请求成功', result));
+        } else {
+            res.json(getResObj(200, verify(data) as string, null))
+        }
+    }
 })
 
 /**
