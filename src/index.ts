@@ -15,7 +15,7 @@ import {bidAdDAOType} from './dao/bigAdDAO'
 //  });
 bigad.findAll().then((res) =>{
     res.forEach(item => {
-        console.log(item.title)
+        console.log(item.title)    
     });
 })
 

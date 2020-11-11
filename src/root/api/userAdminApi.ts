@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getResObj } from '../util';
 import { addMore, addOne, updata, removeMore, removeOne, findAll, findByName, findOne } from '../../services/userAdminSer';
 import { userAdminDAOType } from '../../dao/userAdminDAO';
-
+import md5 from 'md5';
 const router: Router = Router();
 
 /**
@@ -70,18 +70,30 @@ router.post('/', async (req, res, next) => {
             let t = await findByName(item.loginUser);
             return !v && t.length > 0;
         })
+        data = data.map((item: userAdminDAOType) => {
+            return {
+                ...item,
+                loginPassword: md5(item.loginPassword)
+            }
+        })
         const result = await addMore(data);
         res.json(getResObj(200, '添加成功', result))
     } else {
+
         data = {
             loginUser: req.body.loginUser,
-            loginPassword: req.body.loginPassword,
+            loginPassword: md5(req.body.loginPassword),
             email: req.body.email,
             imgsrc: req.body.imgsrc,
             phone: req.body.phone,
             sex: req.body.sex
         }
         if (!verify(data)) {
+            const resu = await findByName(data.loginUser);
+            if (resu.length > 0) {
+                res.json(getResObj(200, '用户已存在', null))
+                return
+            }
             const result = await addOne(data);
             res.json(getResObj(200, '请求成功', result));
         } else {
@@ -94,7 +106,29 @@ router.post('/', async (req, res, next) => {
  * 登录接口
  */
 router.post('/login', async (req, res, next) => {
+    let loginUser = req.body.loginUser;
+    let loginPassword = req.body.loginPassword;
+    if (!loginUser) {
+        res.json(getResObj(200, "用户名为空", null))
+        return
+    }
 
+    if (!loginPassword) {
+        res.json(getResObj(200, "密码为空", null))
+        return
+    }
+
+    const result = await findByName(loginUser);
+    if (result.length < 1) {
+        res.json(getResObj(200, '用户不存在', null))
+        return;
+    }
+
+    if (md5(result[0].loginPassword) !== md5(loginPassword)) {
+        res.json(getResObj(200, "密码不正确", null))
+    }else{
+        res.json(getResObj(200,"登录成功",result[0]))
+    }
 })
 
 /**

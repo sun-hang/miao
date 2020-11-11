@@ -18,7 +18,7 @@ export interface bidAdDAOType {
  * 导出首屏大广告的操作对象
  */
 const sequelize: Sequelize = require('./index');
-export const BidAdDAO: ModelCtor<Model> = sequelize.define("bidad", {
+export const BidAdDAO: ModelCtor<Model> = sequelize.define("bigad", {
     //  标题
     title: {
         type: DataTypes.STRING,
