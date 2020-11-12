@@ -8,7 +8,6 @@ const router = Router();
 
 router.get('/', async (req, res, next) => {
     const result = await findAll();
-    console.log(Object.keys(req.session))
     res.json(getResObj(200, '请求成功', result));
 })
 

@@ -5,15 +5,15 @@ const sequelize: Sequelize = require('./index');
 
 export interface newsDAOType {
     title: string
-    userid: number
-    ctime: number
+    userid?: number
+    ctime: string
     content: string
     tag: string
     imgsrc: string
     synopsis: string
 }
 
-export const NewsDAO:ModelCtor<Model> = sequelize.define("news", {
+export const NewsDAO: ModelCtor<Model> = sequelize.define("news", {
     // 标题
     title: {
         type: DataTypes.STRING,
@@ -26,7 +26,7 @@ export const NewsDAO:ModelCtor<Model> = sequelize.define("news", {
     // },
     // 创建时间
     ctime: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     },
     // 主要内容
@@ -51,7 +51,7 @@ export const NewsDAO:ModelCtor<Model> = sequelize.define("news", {
     }
 }, {
     updatedAt: false,
-    createdAt:false,
+    createdAt: false,
     paranoid: true,
     indexes: [{
         name: "_ctime",
