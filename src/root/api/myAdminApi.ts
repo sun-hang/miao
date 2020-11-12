@@ -2,7 +2,7 @@ import { Router } from 'express';
 import md5 from 'md5';
 import { myAdminDAOType } from '../../dao/myAdminDAO';
 import { addOne, removeMore, removeOne, updata, findAll, findByName, findOne } from '../../services/myAdminSer'
-import { getResObj, getHandler } from '../util';
+import { getResObj, getHandler, delHandler, getIdHandler } from '../util';
 
 const router = Router();
 
@@ -11,13 +11,7 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await findOne(id);
-        res.json(getResObj(200, '请求成功', result));
-    } else {
-        res.json(getResObj(100, "id非数字或不在取值范围", null))
-    }
+    await getIdHandler<myAdminDAOType>(req, res, next, findOne);
 })
 
 function verify(item: myAdminDAOType) {
@@ -117,13 +111,7 @@ router.delete('/', async (req, res, next) => {
 })
 
 router.delete('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await removeOne(id);
-        res.json(getResObj(200, '删除成功', result));
-    } else {
-        res.json(getResObj(100, "id非数字或不在取值范围", null))
-    }
+    await delHandler(req, res, next, removeOne);
 })
 
 export default router;

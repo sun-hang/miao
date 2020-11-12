@@ -2,7 +2,7 @@ require('./dao/init');
 require('./root/index');
 
 import { combineTableNames } from 'sequelize/types/lib/utils';
-import * as bigad from './services/bidAdSer';
+import * as bigad from './services/bigAdSer';
 import { bidAdDAOType } from './dao/bigAdDAO'
 import { findAll, findByName, findOne } from './services/userAdminSer'
 import { UserAdminDAO } from './dao/userAdminDAO'

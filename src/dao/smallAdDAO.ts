@@ -1,12 +1,13 @@
 // 小图广告表
 
-import { Model, ModelCtor, Sequelize,DataTypes } from "sequelize";
+import { Model, ModelCtor, Sequelize, DataTypes } from "sequelize";
 const sequelize: Sequelize = require('./index');
 
 /**
  * 导出首屏小广告的对象类型
  */
 export interface smallAdDAOType {
+    [key: string]: any
     title: string
     content: string
     imgsrc: string

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getHandler, getResObj } from '../util';
+import { delHandler, getHandler, getIdHandler, getResObj } from '../util';
 import { addMore, addOne, updata, removeMore, removeOne, findAll, findByName, findOne } from '../../services/userAdminSer';
 import { userAdminDAOType } from '../../dao/userAdminDAO';
 import md5 from 'md5';
@@ -9,20 +9,14 @@ const router: Router = Router();
  * 获取所有用户列表
  */
 router.get('/', async (req, res, next) => {
-    await getHandler<userAdminDAOType>(req,res,next,findAll);
+    await getHandler<userAdminDAOType>(req, res, next, findAll);
 })
 
 /**
  * 根据id获取
  */
 router.get('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await findOne(id);
-        res.json(getResObj(200, '请求成功', result));
-    } else {
-        res.json(getResObj(200, "id非数字或不在取值范围", null))
-    }
+    await getIdHandler<userAdminDAOType>(req, res, next, findOne);
 })
 
 /**
@@ -43,7 +37,7 @@ function verify(item: userAdminDAOType) {
         return '邮箱格式不正确';
     }
 
-    if (!item.imgsrc && !/^.+(\.jpg|\.png|\.jpeg|\.gif)/.test(item.imgsrc)) {
+    if (!item.imgsrc || !/^.+(\.jpg|\.png|\.jpeg|\.gif)$/.test(item.imgsrc)) {
         return '图片地址不存在或格式不对';
     }
 
@@ -181,13 +175,7 @@ router.delete('/', async (req, res, next) => {
  * 删除一个
  */
 router.delete('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await removeOne(id);
-        res.json(getResObj(200, "删除成功", result));
-    } else {
-        res.json(getResObj(200, "id非数字或id不在取值范围", null))
-    }
+    await delHandler(req, res, next, removeOne);
 })
 
 export default router;

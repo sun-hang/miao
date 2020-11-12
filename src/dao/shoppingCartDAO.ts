@@ -5,6 +5,7 @@ const sequelize: Sequelize = require('./index');
 
 // 导出购物车表的数据结构类型
 export interface ShoppingCartDAOType {
+    [key: string]: any
     userId?: number
     productId?: number
     productDataId?: number

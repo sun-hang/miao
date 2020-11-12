@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { newsDAOType } from '../../dao/newsDAO';
 import { addMore, addOne, autoQuery, removeMore, removeOne, updata, findAll, findByPage, findOne, findTag } from '../../services/newsSer';
-import { getResObj, putHandler } from '../util';
+import { delHandler, delMoreHandler, getIdHandler, getResObj, postHandler, putHandler } from '../util';
 const router = Router();
 
 router.get('/', async (req, res, next) => {
@@ -24,13 +24,7 @@ router.get('/tag/:tag', async (req, res, next) => {
 })
 
 router.get('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await findOne(id)
-        res.json(getResObj(200, "请求成功", result));
-    } else {
-        res.json(getResObj(200, 'id非数字或不在取值范围', null))
-    }
+    await getIdHandler<newsDAOType>(req, res, next, findOne);
 })
 
 function verify(item: newsDAOType) {
@@ -42,7 +36,7 @@ function verify(item: newsDAOType) {
         return 'ctime 属性不存在'
     }
 
-    if (!item.imgsrc || !/^.+(\.jpg|\.png|\.jpeg|\.gif)/.test(item.imgsrc)) {
+    if (!item.imgsrc || !/^.+(\.jpg|\.png|\.jpeg|\.gif)$/.test(item.imgsrc)) {
         return "imgsrc 属性不存在或格式不正确"
     }
 
@@ -62,56 +56,19 @@ function verify(item: newsDAOType) {
 }
 
 router.post('/', async (req, res, next) => {
-    let data = req.body.data;
-    // 添加多个
-    if (Array.isArray(data)) {
-        data = data.filter((item) => {
-            return !verify(item);
-        })
-        const result = await addMore(data);
-        res.json(getResObj(200, "添加成功", result));
-    } else {
-        data = {
-            ...req.body,
-            ctime: Date.now() + ''
-        }
-        // 添加一个
-        let flag = verify(data);
-        if (!flag) {
-            let result = await addOne(data);
-            res.json(getResObj(200, "添加成功", result));
-        } else {
-            res.json(getResObj(200, flag, null))
-        }
-    }
-
+    await postHandler<newsDAOType>(req, res, next, addOne, addMore, verify);
 })
 
 router.put('/:id', async (req, res, next) => {
-    await putHandler(req,res,next,updata);
+    await putHandler(req, res, next, updata);
 })
 
 router.delete('/', async (req, res, next) => {
-    let ids = req.body.data;
-    if (Array.isArray(ids)) {
-        ids = ids.filter((item) => {
-            return !Object.is(NaN, item) && item > 0
-        })
-        const result = await removeMore(ids);
-        res.json(getResObj(200, '删除成功', result));
-    } else {
-        res.json(getResObj(200, "请传入一个data的数组", null));
-    }
+    await delMoreHandler(req, res, next, removeMore);
 })
 
 router.delete('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await removeOne(id)
-        res.json(getResObj(200, "删除成功", result));
-    } else {
-        res.json(getResObj(200, 'id非数字或不在取值范围', null))
-    }
+    await delHandler(req, res, next, removeOne);
 })
 
 export default router;

@@ -76,14 +76,14 @@ export const findAll = async (): Promise<ShoppingCartDAOType[]> => {
 /**
  * 根据id查询
  */
-export const findById = async (id: number): Promise<ShoppingCartDAOType[]> => {
-    const result = await ShoppingCartDAO.findAll({
-        include: [ProductDAO, ProductDataDAO, UserAdminDAO],
-        where: {
-            id
-        }
+export const findById = async (id: number): Promise<ShoppingCartDAOType | null> => {
+    const result = await ShoppingCartDAO.findByPk(id, {
+        include: [ProductDAO, ProductDataDAO, UserAdminDAO]
     });
-    return JSON.parse(JSON.stringify(result));
+    if (result) {
+        return result.toJSON() as ShoppingCartDAOType;
+    }
+    return null;
 }
 /**
  * 倒叙查询第一条

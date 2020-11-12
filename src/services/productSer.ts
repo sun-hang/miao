@@ -75,12 +75,12 @@ export const findAll = async (): Promise<ProductDAOType[]> => {
 /**
  * 查询一个根据id
  */
-export const findById = async (id: number) => {
-    const result = await ProductDAO.findAll({
-        where: {
-            id
-        }
-    });
+export const findById = async (id: number): Promise<ProductDAOType | null> => {
+    const result = await ProductDAO.findByPk(id);
+    if (result) {
+        return result.toJSON() as ProductDAOType;
+    }
+    return null;
 }
 /**
  * 根据标签

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { commentDAOType } from '../../dao/commentDAO';
-import { getResObj, putHandler } from '../util';
+import { delHandler, delMoreHandler, getIdHandler, getResObj, postHandler, putHandler } from '../util';
 import { addMore, addOne, removeMore, removeOne, updata, findAll, findByPage, findDESC, findOne } from '../../services/commentSer';
 const router: Router = Router();
 
@@ -36,13 +36,7 @@ router.get('/', async (req, res, next) => {
 
 // 根据id进行获取
 router.get('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await findOne(id);
-        res.json(getResObj(200, '请求成功', result));
-    } else {
-        res.json(getResObj(200, "id参数非数字或不在范围", null));
-    }
+    await getIdHandler<commentDAOType>(req, res, next, findOne);
 })
 
 function verify(item: commentDAOType) {
@@ -72,69 +66,28 @@ function verify(item: commentDAOType) {
  * 添加多个
  */
 router.post('/', async (req, res, next) => {
-    let data = req.body.data;
-    // 添加多个
-    if (Array.isArray(data)) {
-        data = data.filter((item) => {
-            return !verify(item);
-        })
-        const result = await addMore(data);
-        res.json(getResObj(200, "添加成功", result));
-        return
-    }
-    data = {
-        content: req.body.content,
-        ctime: Date.now(),
-        imgs: req.body.imgs,
-        productid: req.body.productid,
-        username: req.body.username,
-        userid: req.body.userid
-    }
-
-    // 添加一个
-    let flag = verify(data);
-    if (!flag) {
-        let result = await addOne(data);
-        res.json(getResObj(200, "添加成功", result));
-    } else {
-        res.json(getResObj(200, flag, null))
-    }
+    await postHandler<commentDAOType>(req, res, next, addOne, addMore, verify);
 })
 
 /**
  * 修改一个
  */
 router.put('/:id', async (req, res, next) => {
-    await putHandler(req,res,next,updata);
+    await putHandler(req, res, next, updata);
 })
 
 /**
  * 删除多个
  */
 router.delete('/', async (req, res, next) => {
-    let ids = req.body.data;
-    if (Array.isArray(ids)) {
-        ids = ids.filter((item) => {
-            return !Object.is(NaN, item) && item > 0
-        })
-        const result = await removeMore(ids);
-        res.json(getResObj(200, '删除成功', result));
-    } else {
-        res.json(getResObj(200, "请传入一个data的数组", null));
-    }
+    await delMoreHandler(req, res, next, removeMore);
 })
 
 /**
  * 删除指定数据
  */
 router.delete('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (Object.is(NaN, id) && id > 0) {
-        const result = await removeOne(id);
-        res.json(getResObj(200, "删除成功", result));
-    } else {
-        res.json(getResObj(200, "id非数字或数字不在范围", null))
-    }
+    await delHandler(req, res, next, removeOne);
 })
 
 export default router;

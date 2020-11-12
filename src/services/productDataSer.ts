@@ -84,12 +84,12 @@ export const findProductId = async (productId: number): Promise<ProductDataDAOTy
 /**
  * 根据id查询数据
  */
-export const findById = async (id: number): Promise<ProductDataDAOType[]> => {
-    const result = await ProductDataDAO.findAll({
-        include: [ProductDAO],
-        where: {
-            id
-        }
+export const findById = async (id: number): Promise<ProductDataDAOType | null> => {
+    const result = await ProductDataDAO.findByPk(id, {
+        include: [ProductDAO]
     })
-    return JSON.parse(JSON.stringify(result));
+    if (result) {
+        return result.toJSON() as ProductDataDAOType;
+    }
+    return null;
 }   

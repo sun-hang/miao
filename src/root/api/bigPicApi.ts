@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getResObj, getHandler, putHandler } from '../util';
+import { getResObj, getHandler, putHandler, delHandler, delMoreHandler, getIdHandler, postHandler } from '../util';
 import { bigPicDAOType } from '../../dao/bigPicDAO';
 import { addMore, addOne, removeMore, removeOne, update, findAll, findById, findByNewOne } from '../../services/bigPicSer';
 import { updata } from '../../services/userAdminSer';
@@ -24,13 +24,7 @@ router.get('/new', async (req, res, next) => {
  * 获取指定数据
  */
 router.get('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (id > 0 && !Object.is(NaN, id)) {
-        let result = await findById(id);
-        res.json(getResObj(200, "请求成功", result));
-    } else {
-        res.json(getResObj(200, "id非数字或数值越界或不存在", null))
-    }
+    await getIdHandler<bigPicDAOType>(req, res, next, findById);
 })
 
 
@@ -51,25 +45,7 @@ function verify(item: bigPicDAOType) {
  * 添加一个或多个
  */
 router.post('/', async (req, res, next) => {
-    let data = req.body.data;
-    if (Array.isArray(data)) {
-        let dataFilter = data.filter((item) => {
-            return !verify(item);
-        })
-        let result = await addMore(dataFilter);
-        res.json(getResObj(200, "添加成功", result))
-        return;
-    }
-    let data2: bigPicDAOType = {
-        imgsrc: req.body.imgsrc
-    }
-    let flag = verify(data2);
-    if (flag) {
-        res.json(getResObj(200, flag, null))
-    } else {
-        const result = await addOne(data2);
-        res.json(getResObj(200, "添加成功", result))
-    }
+    await postHandler<bigPicDAOType>(req, res, next, addOne, addMore, verify);
 })
 
 /**
@@ -83,30 +59,14 @@ router.put('/:id', async (req, res, next) => {
  * 删除多个数据
  */
 router.delete('/', async (req, res, next) => {
-    let ids = req.body.data;
-    if (Array.isArray(ids)) {
-        let data = ids.filter((item) => {
-            return !Object.is(NaN, item) && item > 0
-        })
-        console.log(data);
-        let result = await removeMore(data);
-        res.json(getResObj(200, "删除成功", result));
-    } else {
-        res.json(getResObj(200, "数据格式错误，请传递一个data的数字数组", null))
-    }
+    await delMoreHandler(req, res, next, removeMore);
 })
 
 /**
  * 删除指定数据
  */
 router.delete('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await removeOne(id);
-        res.json(getResObj(200, "删除成功", result));
-    } else {
-        res.json(getResObj(200, "id不存在或id不是数字或不在取值范围", null))
-    }
+    await delHandler(req, res, next, removeOne);
 })
 
 export default router;

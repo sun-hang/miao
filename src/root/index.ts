@@ -41,7 +41,7 @@ app.use(exporess.urlencoded({
 app.use(exporess.text());
 
 // 首屏大广告处理路由
-app.use('/api/bigad', require('./api/bidAdApi').default)
+app.use('/api/bigad', require('./api/bigAdApi').default)
 
 // 首屏大图的处理路由
 app.use('/api/bigpic', require('./api/bigPicApi').default)

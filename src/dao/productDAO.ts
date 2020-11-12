@@ -4,6 +4,7 @@ import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize";
 const sequelize: Sequelize = require('./index');
 
 export interface ProductDAOType {
+    readonly [k: string]: any
     productName: string
     originalPrice: number
     nowPrice: number

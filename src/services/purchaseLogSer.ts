@@ -89,12 +89,12 @@ export const findByUserId = async (useradminId: number): Promise<ShoppingCartDAO
  * 根据id查询
  */
 
-export const findById = async (id: number): Promise<ShoppingCartDAOType[]> => {
-    const result = await PurchaseLogDAO.findAll({
-        include: [ProductDAO, ProductDataDAO, UserAdminDAO],
-        where: {
-            id
-        }
+export const findById = async (id: number): Promise<ShoppingCartDAOType | null> => {
+    const result = await PurchaseLogDAO.findByPk(id, {
+        include: [ProductDAO, ProductDataDAO, UserAdminDAO]
     });
-    return JSON.parse(JSON.stringify(result));
+    if (result) {
+        return result.toJSON() as ShoppingCartDAOType;
+    }
+    return null;
 }

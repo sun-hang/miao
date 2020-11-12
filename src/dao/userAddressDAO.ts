@@ -4,6 +4,7 @@ import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize";
 const sequelize: Sequelize = require('./index');
 
 export interface UserAddressDAOType {
+    [key: string]: any
     userId: number //用户id
     province: string //所在省份
     city: string    //所在城市
