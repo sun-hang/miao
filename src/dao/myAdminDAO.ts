@@ -24,7 +24,7 @@ export const MyAdminDAO:ModelCtor<Model> = sequelize.define("myadmin", {
     },
     // 创建时间
     ctime: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     }
 }, {

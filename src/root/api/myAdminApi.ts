@@ -8,6 +8,7 @@ const router = Router();
 
 router.get('/', async (req, res, next) => {
     const result = await findAll();
+    console.log(Object.keys(req.session))
     res.json(getResObj(200, '请求成功', result));
 })
 
@@ -42,9 +43,14 @@ function verify(item: myAdminDAOType) {
 
 router.post('/', async (req, res, next) => {
     let data = req.body;
-    data.ctime = Date.now();
+    data.ctime = Date.now() + '';
     let key = verify(data);
     if (!key) {
+        const resultList = await findByName(data.loginUser);
+        if (resultList.length > 0) {
+            res.json(getResObj(200, "用户已存在", null))
+            return;
+        }
         data.loginPassword = md5(req.body.loginPassword);
         const result = await addOne(data);
         res.json(getResObj(200, '添加成功', result))
@@ -54,7 +60,32 @@ router.post('/', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
+    let loginUser = req.body.loginUser;
+    let loginPassword = req.body.loginPassword;
+    if (!loginUser) {
+        res.json(getResObj(200, "用户名不存在", null))
+        return
+    }
 
+    if (!loginPassword) {
+        res.json(getResObj(200, "密码不存在", null))
+    }
+
+    const result = await findByName(loginUser);
+    if (result.length > 0) {
+        if (result[0].loginPassword === md5(loginPassword)) {
+            // 卖家用户登录设置session的myuser属性 买家登录设置session的user属性
+            let session: any = req.session;
+            session.myUser = result[0];
+            req.session = session;
+            result[0].loginPassword = '';
+            res.json(getResObj(200, "登录成功", result[0]))
+        } else {
+            res.json(getResObj(200, '密码错误', null));
+        }
+    }else{
+        res.json(getResObj(200, "用户不存在", null))
+    }
 })
 
 router.put('/:id', async (req, res, next) => {
