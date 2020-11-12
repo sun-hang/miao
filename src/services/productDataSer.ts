@@ -49,8 +49,8 @@ export const removeMore = async (ids: number[]): Promise<number> => {
  * 修改一个
  */
 
-export const updata = async (id: number, option = {}) => {
-    const result = await ProductDataDAO.update(option, {
+export const updata = async (id: number, data = {}) => {
+    const result = await ProductDataDAO.update(data, {
         where: {
             id
         }

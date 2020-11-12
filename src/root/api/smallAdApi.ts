@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { smallAdDAOType } from '../../dao/smallAdDAO';
 import { addMore, addOne, removeMore, removeOne, updata, findAll, findDesc, findOne } from '../../services/smallAdSer';
-import { getResObj } from '../util';
+import { getResObj, putHandler } from '../util';
 
 const router: Router = Router();
 
@@ -22,7 +22,7 @@ router.post('/', async (req, res, next) => {
 })
 
 router.put('/:id', async (req, res, next) => {
-
+    await putHandler(req, res, next, updata);
 })
 
 router.delete('/', async (req, res, next) => {

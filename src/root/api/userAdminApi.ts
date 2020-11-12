@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getResObj } from '../util';
+import { getHandler, getResObj } from '../util';
 import { addMore, addOne, updata, removeMore, removeOne, findAll, findByName, findOne } from '../../services/userAdminSer';
 import { userAdminDAOType } from '../../dao/userAdminDAO';
 import md5 from 'md5';
@@ -9,9 +9,7 @@ const router: Router = Router();
  * 获取所有用户列表
  */
 router.get('/', async (req, res, next) => {
-    const result = await findAll();
-    console.log(req.session)
-    res.json(getResObj(200, "请求成功", result));
+    await getHandler<userAdminDAOType>(req,res,next,findAll);
 })
 
 /**

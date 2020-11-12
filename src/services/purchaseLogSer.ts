@@ -54,8 +54,8 @@ export const removeMore = async (ids: number[]): Promise<number> => {
  * 修改一个
  */
 
-export const update = async (id: number, option: UpdateOptions<ShoppingCartDAOType>) => {
-    const result = await PurchaseLogDAO.update(option, {
+export const updata = async (id: number, data = {}) => {
+    const result = await PurchaseLogDAO.update(data, {
         where: {
             id
         }
@@ -79,7 +79,7 @@ export const findAll = async (): Promise<ShoppingCartDAOType[]> => {
 export const findByUserId = async (useradminId: number): Promise<ShoppingCartDAOType[]> => {
     const result = await PurchaseLogDAO.findAll({
         include: [ProductDAO, ProductDataDAO, UserAdminDAO],
-        where:{
+        where: {
             useradminId
         }
     });
@@ -92,7 +92,7 @@ export const findByUserId = async (useradminId: number): Promise<ShoppingCartDAO
 export const findById = async (id: number): Promise<ShoppingCartDAOType[]> => {
     const result = await PurchaseLogDAO.findAll({
         include: [ProductDAO, ProductDataDAO, UserAdminDAO],
-        where:{
+        where: {
             id
         }
     });

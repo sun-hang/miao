@@ -1,15 +1,15 @@
 import { Router } from 'express';
-import { getResObj } from '../util';
+import { getResObj, getHandler, putHandler } from '../util';
 import { bigPicDAOType } from '../../dao/bigPicDAO';
 import { addMore, addOne, removeMore, removeOne, update, findAll, findById, findByNewOne } from '../../services/bigPicSer';
+import { updata } from '../../services/userAdminSer';
 const router: Router = Router();
 
 /**
  * 获取所有数据
  */
 router.get('/', async (req, res, next) => {
-    const result = await findAll();
-    res.json(getResObj(200, "请求成功", result));
+    await getHandler<bigPicDAOType>(req, res, next, findAll);
 })
 
 /**
@@ -76,13 +76,7 @@ router.post('/', async (req, res, next) => {
  * 修改指定数据
  */
 router.put('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await update(id, req.body);
-        res.json(getResObj(200, "修改成功", result));
-    } else {
-        res.json(getResObj(200, "id不存在或id不是数字或不在取值范围", null))
-    }
+    await putHandler(req, res, next, updata);
 })
 
 /**

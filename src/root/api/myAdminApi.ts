@@ -2,13 +2,12 @@ import { Router } from 'express';
 import md5 from 'md5';
 import { myAdminDAOType } from '../../dao/myAdminDAO';
 import { addOne, removeMore, removeOne, updata, findAll, findByName, findOne } from '../../services/myAdminSer'
-import { getResObj } from '../util';
+import { getResObj, getHandler } from '../util';
 
 const router = Router();
 
 router.get('/', async (req, res, next) => {
-    const result = await findAll();
-    res.json(getResObj(200, '请求成功', result));
+    await getHandler<myAdminDAOType>(req, res, next, findAll);
 })
 
 router.get('/:id', async (req, res, next) => {
@@ -82,7 +81,7 @@ router.post('/login', async (req, res, next) => {
         } else {
             res.json(getResObj(200, '密码错误', null));
         }
-    }else{
+    } else {
         res.json(getResObj(200, "用户不存在", null))
     }
 })
@@ -90,6 +89,13 @@ router.post('/login', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
     let id = parseInt(req.params.id);
     if (!Object.is(NaN, id) && id > 0) {
+        if (req.body.loginUser) {
+            const result = await findByName(req.body.loginUser);
+            if (result.length > 0) {
+                res.json(getResObj(200, "用户名已存在", null));
+                return;
+            }
+        }
         const result = await updata(id, req.body);
         res.json(getResObj(200, '修改成功', result));
     } else {

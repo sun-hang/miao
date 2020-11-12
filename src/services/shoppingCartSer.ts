@@ -53,8 +53,8 @@ export const removeMore = async (ids: number[]): Promise<number> => {
  * 修改一个
  */
 
-export const update = async (id: number, option: UpdateOptions<ShoppingCartDAOType>) => {
-    const result = await ShoppingCartDAO.update(option, {
+export const update = async (id: number, data = {}) => {
+    const result = await ShoppingCartDAO.update(data, {
         where: {
             id
         }

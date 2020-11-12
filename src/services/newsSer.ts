@@ -54,8 +54,8 @@ export const removeMore = async (datas: number[]): Promise<number> => {
  *
  */
 
-export const updata = async (id: number, option = {}) => {
-    const result = await NewsDAO.update(option, {
+export const updata = async (id: number, data = {}) => {
+    const result = await NewsDAO.update(data, {
         where: {
             id
         }

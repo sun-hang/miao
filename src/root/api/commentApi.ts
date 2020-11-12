@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { commentDAOType } from '../../dao/commentDAO';
-import { getResObj } from '../util';
+import { getResObj, putHandler } from '../util';
 import { addMore, addOne, removeMore, removeOne, updata, findAll, findByPage, findDESC, findOne } from '../../services/commentSer';
 const router: Router = Router();
 
@@ -105,13 +105,7 @@ router.post('/', async (req, res, next) => {
  * 修改一个
  */
 router.put('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (Object.is(NaN, id) && id > 0) {
-        const result = await updata(id, req.body);
-        res.json(getResObj(200, "修改成功", result));
-    } else {
-        res.json(getResObj(200, "id非数字或参数不在范围", null))
-    }
+    await putHandler(req,res,next,updata);
 })
 
 /**

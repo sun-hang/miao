@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { bidAdDAOType } from '../../dao/bigAdDAO';
 import { findByNewOne, findById, findAll, addOne, upData, removeOne, removeMore, addMore } from '../../services/bidAdSer'
-import { getResObj, ResObjType } from '../util'
+import { updata } from '../../services/userAdminSer';
+import { getResObj, getHandler, putHandler } from '../util'
 const router: Router = Router();
 
 /**
@@ -29,8 +30,7 @@ router.get('/:id', async (req, res, next) => {
  * 查询所有
  */
 router.get('/', async (req, res, next) => {
-    const result = await findAll();
-    res.json(getResObj(200, "请求成功", result))
+    await getHandler<bidAdDAOType>(req, res, next, findAll)
 })
 
 /**
@@ -88,13 +88,7 @@ router.post('/', async (req, res, next) => {
  * 修改
  */
 router.put('/:id', async (req, res, next) => {
-    const id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) || id != 0) {
-        const result = await upData(req.body, id);
-        res.json(getResObj(200, "修改成功", result))
-    } else {
-        res.json(getResObj(200, "id错误", null))
-    }
+    await putHandler(req,res,next,updata);
 })
 
 /**

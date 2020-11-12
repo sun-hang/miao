@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { newsDAOType } from '../../dao/newsDAO';
 import { addMore, addOne, autoQuery, removeMore, removeOne, updata, findAll, findByPage, findOne, findTag } from '../../services/newsSer';
-import { getResObj } from '../util';
+import { getResObj, putHandler } from '../util';
 const router = Router();
 
 router.get('/', async (req, res, next) => {
@@ -88,13 +88,7 @@ router.post('/', async (req, res, next) => {
 })
 
 router.put('/:id', async (req, res, next) => {
-    let id = parseInt(req.params.id);
-    if (!Object.is(NaN, id) && id > 0) {
-        const result = await updata(id, req.body)
-        res.json(getResObj(200, "修改成功", result));
-    } else {
-        res.json(getResObj(200, 'id非数字或不在取值范围', null))
-    }
+    await putHandler(req,res,next,updata);
 })
 
 router.delete('/', async (req, res, next) => {

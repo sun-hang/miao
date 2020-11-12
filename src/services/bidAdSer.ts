@@ -59,7 +59,7 @@ export const removeMore = async (ids: number[]): Promise<number> => {
 /**
  * 改一个
  */
-export const upData = async (data: object, id: number) => {
+export const upData = async (id: number, data: object = {}) => {
     const result = await BidAdDAO.update(data, {
         where: {
             id
