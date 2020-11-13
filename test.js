@@ -64,7 +64,7 @@ function removeNode(root, index) {
  * 删除指定值的节点
  */
 function removeValue(root, value) {
-    
+
 }
 /**
  * 末尾添加值
@@ -81,6 +81,20 @@ function removeValue(root, value) {
 /**
  * 链表倒置
  */
-print(a);
-console.log(getLength(a));
-console.log(getIndexValue(a, 0))
+// print(a);
+// console.log(getLength(a));
+// console.log(getIndexValue(a, 0))
+
+const fs = require('fs');
+const path = require('path');
+(async () => {
+    try {
+        let data = await fs.promises.stat('./abc.json');
+    } catch (error) {
+        console.log(error)
+    }
+    // console.log(data);
+})()
+console.log(1111)
+console.log(__dirname)
+console.log(path.resolve(__dirname,'files/a.js'))
