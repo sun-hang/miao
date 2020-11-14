@@ -27,6 +27,8 @@ app.use(session({
 }));
 
 
+app.use(require('./tokenMiddleware').default)
+
 // 图片防盗链
 app.use(require('./imgMiddleware').default);
 

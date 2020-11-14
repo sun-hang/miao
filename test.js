@@ -87,15 +87,15 @@ function removeValue(root, value) {
 
 const fs = require('fs');
 const path = require('path');
-(async () => {
-    try {
-        let data = await fs.promises.stat('./abc.json');
-    } catch (error) {
-        console.log(error)
-    }
-    // console.log(data);
-})()
+// (async () => {
+//     try {
+//         let data = await fs.promises.stat('./abc.json');
+//     } catch (error) {
+//         console.log(error)
+//     }
+//     // console.log(data);
+// })()
 // console.log(1111)
 // console.log(__dirname)
 // console.log(path.resolve(__dirname,'files/a.js'))
-console.log(process.versions)
+console.log(!path.extname('/123/1234'))
