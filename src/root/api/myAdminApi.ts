@@ -73,6 +73,7 @@ router.post('/login', async (req, res, next) => {
             req.session = session;
             result[0].loginPassword = '';
             res.json(getResObj(200, "登录成功", result[0]))
+            console.log(req.session)
         } else {
             res.json(getResObj(200, '密码错误', null));
         }

@@ -22,6 +22,7 @@ app.use(session({
     secret: "ssflovefmm",
     cookie: {
         maxAge: 60 * 1000 * 60 * 24 * 7,
+        httpOnly:false
     },
     name: "sessionid"
 }));
