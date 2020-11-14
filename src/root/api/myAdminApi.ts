@@ -2,6 +2,7 @@ import { Router } from 'express';
 import md5 from 'md5';
 import { myAdminDAOType } from '../../dao/myAdminDAO';
 import { addOne, removeMore, removeOne, updata, findAll, findByName, findOne } from '../../services/myAdminSer'
+import { publish } from '../jwt';
 import { getResObj, getHandler, delHandler, getIdHandler } from '../util';
 
 const router = Router();
@@ -66,7 +67,7 @@ router.post('/login', async (req, res, next) => {
     const result = await findByName(loginUser);
     if (result.length > 0) {
         if (result[0].loginPassword === md5(loginPassword)) {
-            // 卖家用户登录设置session的myuser属性 买家登录设置session的user属性
+            // 卖家用户验证session
             let session: any = req.session;
             session.myUser = result[0];
             req.session = session;

@@ -3,6 +3,7 @@ import { delHandler, getHandler, getIdHandler, getResObj } from '../util';
 import { addMore, addOne, updata, removeMore, removeOne, findAll, findByName, findOne } from '../../services/userAdminSer';
 import { userAdminDAOType } from '../../dao/userAdminDAO';
 import md5 from 'md5';
+import { publish } from '../jwt';
 const router: Router = Router();
 
 /**
@@ -131,10 +132,11 @@ router.post('/login', async (req, res, next) => {
     if (result[0].loginPassword !== md5(loginPassword)) {
         res.json(getResObj(200, "密码不正确", null))
     } else {
-        let session: any = req.session;
-        session.user = result[0];
-        req.session = session;
-        result[0].loginPassword = '';
+        // let session: any = req.session;
+        // session.user = result[0];
+        // req.session = session;
+        // result[0].loginPassword = '';
+        publish(res, 1000 * 360 * 24, result[0]);
         res.json(getResObj(200, "登录成功", result[0]))
     }
 })

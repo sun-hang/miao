@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 const secrect = "hangaimiao";
-const cookieKey = 'jwtToken';
+export const cookieKey = 'jwtToken';
 export const publish = async (res: Response, maxAge: number = 1000 * 60 * 60 * 24, info: object = {}) => {
     const token = jwt.sign(info, secrect, {
         expiresIn: maxAge
@@ -13,7 +13,7 @@ export const publish = async (res: Response, maxAge: number = 1000 * 60 * 60 * 2
     res.header('authorization', token)
 }
 
-export const verify = async (req: Request) => {
+export const verify = (req: Request) => {
     let token: string = req.cookies[cookieKey];
     if (!token) {
         token = req.headers.authorization ? req.headers.authorization : '';

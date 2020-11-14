@@ -1,2 +1,3 @@
 产品要加产品名搜索标签名搜索品牌搜索
-加双层验证，jwt 和 session
+加双层验证，jwt验证前台 和 session验证后台
+卖家用户登录设置session的myuser属性 买家登录设置session的user属性
