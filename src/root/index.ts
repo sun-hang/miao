@@ -40,6 +40,9 @@ app.use(exporess.urlencoded({
 // 解析文本格式
 app.use(exporess.text());
 
+// 图片防盗链
+app.use(require('./imgMiddleware').default);
+
 // 首屏大广告处理路由
 app.use('/api/bigad', require('./api/bigAdApi').default)
 

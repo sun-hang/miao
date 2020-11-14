@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/:filename', async (req, res, next) => {
     try {
-        const pathname = path.resolve(__dirname, 'files/' + req.params.filename);
+        const pathname = path.resolve(__dirname, '../../../files/' + req.params.filename);
         await fs.promises.stat(pathname);
         res.download(pathname, req.params.filename);
     } catch (error) {

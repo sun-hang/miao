@@ -95,6 +95,7 @@ const path = require('path');
     }
     // console.log(data);
 })()
-console.log(1111)
-console.log(__dirname)
-console.log(path.resolve(__dirname,'files/a.js'))
+// console.log(1111)
+// console.log(__dirname)
+// console.log(path.resolve(__dirname,'files/a.js'))
+console.log(process.versions)

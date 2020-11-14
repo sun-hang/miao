@@ -45,6 +45,10 @@ function verify(item: userAdminDAOType) {
         return '手机号格式不对';
     }
 
+    if (!item.originsrc || !/^.+(\.jpg|\.png|\.jpeg|\.gif)$/.test(item.originsrc)) {
+        return '图片地址不存在或格式不对';
+    }
+
     if (typeof item.sex !== 'boolean') {
         return '参数不正确';
     }
@@ -85,7 +89,8 @@ router.post('/', async (req, res, next) => {
             email: req.body.email,
             imgsrc: req.body.imgsrc,
             phone: req.body.phone,
-            sex: req.body.sex
+            sex: req.body.sex,
+            originsrc: req.body.originsrc
         }
         if (!verify(data)) {
             data.loginPassword = md5(req.body.loginPassword);

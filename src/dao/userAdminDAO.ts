@@ -9,6 +9,7 @@ export interface userAdminDAOType {
     loginPassword: string
     email?: string
     imgsrc: string
+    originsrc: string
     sex: boolean,
     phone: string
 }
@@ -30,6 +31,10 @@ export const UserAdminDAO: ModelCtor<Model> = sequelize.define('useradmin', {
     },
     // 头像地址
     imgsrc: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    originsrc: {
         type: DataTypes.STRING,
         allowNull: false
     },
