@@ -14,7 +14,7 @@ let storage = multer.diskStorage({
         let ext = path.extname(file.originalname);
         callback(null, path.basename(file.originalname, ext) + Date.now() + (Math.floor(Math.random() * 100)) + ext);
     }
-})
+}) 
 
 async function mark(pathname: string, targetPath: string) {
     const temp = await jimp.read(pathname);

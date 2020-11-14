@@ -5,7 +5,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const extName = path.extname(req.path);
     let referer = req.headers.referer || '';
     const origin = req.headers.host || '';
-    console.log(req.headers);
+    // console.log(req.headers);
     if (!['.jpg', '.png', '.jpeg', '.gif'].includes(extName)) {
         next();
         return
@@ -14,7 +14,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
         referer = url.parse(referer).host ? url.parse(referer).host as string: '';
     }
     if (referer && origin !== referer) {
-        req.url = '/img/1.jpg'
+        console.log(req.url)
+        req.url = '/image/1.jpg'
+        console.log(req.url)
     }
-    next()
-}
+    console.log(referer,origin)
+    next();
+}  

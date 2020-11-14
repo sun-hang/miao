@@ -14,9 +14,6 @@ app.use(cors({
     origin: "*"
 }))
 
-// 静态文件中间件
-app.use(exporess.static(rootPath));
-
 // 解析cookie中间件
 app.use(cookies());
 
@@ -29,6 +26,13 @@ app.use(session({
     name: "sessionid"
 }));
 
+
+// 图片防盗链
+app.use(require('./imgMiddleware').default);
+
+// 静态文件中间件
+app.use(exporess.static(rootPath));
+
 // 解析json格式数据
 app.use(exporess.json());
 
@@ -40,8 +44,7 @@ app.use(exporess.urlencoded({
 // 解析文本格式
 app.use(exporess.text());
 
-// 图片防盗链
-app.use(require('./imgMiddleware').default);
+
 
 // 首屏大广告处理路由
 app.use('/api/bigad', require('./api/bigAdApi').default)
