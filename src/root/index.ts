@@ -11,7 +11,11 @@ const rootPath = path.resolve('', './public');
 
 // 跨域处理
 app.use(cors({
-    origin: "*"
+    origin(origin, cd) {
+        cd(null, true)
+    },
+    credentials: true,
+    methods:['GET','POST']
 }))
 
 // 解析cookie中间件

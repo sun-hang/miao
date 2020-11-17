@@ -55,6 +55,7 @@ router.post('/', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
     let loginUser = req.body.loginUser;
     let loginPassword = req.body.loginPassword;
+    console.log(req.body);
     if (!loginUser) {
         res.json(getResObj(200, "用户名不存在", null))
         return
@@ -73,13 +74,24 @@ router.post('/login', async (req, res, next) => {
             req.session = session;
             result[0].loginPassword = '';
             res.json(getResObj(200, "登录成功", result[0]))
-            console.log(req.session)
         } else {
             res.json(getResObj(200, '密码错误', null));
         }
     } else {
         res.json(getResObj(200, "用户不存在", null))
     }
+})
+
+router.post('/whoami', async (req, res, next) => {
+    let session: any = req.session;
+    if (session.myUser) {
+        const result = await findOne(session.myUser.id)
+        console.log(result);
+        res.json(getResObj(200, '请求成功', result));
+    } else {
+        res.json(getResObj(200, "请登录", null))
+    }
+
 })
 
 router.put('/:id', async (req, res, next) => {

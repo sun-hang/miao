@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <!-- 首页主页 -->
-    <h1>这是首页</h1>
-  </div>
+    <div>
+        <h1>您访问的页面不存在</h1>
+    </div>
 </template>
-
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({});

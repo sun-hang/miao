@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import path from 'path';
 import { ne } from "sequelize/types/lib/operators";
 import { verify } from "./jwt";
-const whiteList = ['/', '/index.html', '/admin/index.html', '/api/user/login', '/api/user/logon', '/api/myuser/login','/api/captcha'];
+const whiteList = ['/', '/index.html', '/admin/index.html', '/api/user/login', '/api/user/logon', '/api/myuser/login','/api/captcha','/api/myuser/whoami'];
 const userWhiteList = ['/api/user'];
 
 /**
