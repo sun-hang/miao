@@ -99,13 +99,22 @@ export const findByTag = async (tag: string): Promise<ProductDAOType[]> => {
 /**
  * 分页查询+标签
  */
-export const findByPageAndTag = async (page: number = 1, size: number = 10, tag: string): Promise<{ count: number, rows: ProductDAOType[] }> => {
+export const findByPageAndTag = async (page: number = 1, size: number = 10, tag?: string, name?: string): Promise<{ count: number, rows: ProductDAOType[] }> => {
     let where: any = {};
+    tag = tag ? tag : '';
+    name = name ? name : '';
     if (tag) {
         tag = '%' + tag + '%';
-        where.tag = {
-            [Op.like]: tag
-        }
+        name = "%" + name + "%";
+        where[Op.or] = [{
+            tag: {
+                [Op.like]: tag
+            }
+        }, {
+            name: {
+                [Op.like]: name
+            }
+        }]
     }
 
     const result = await ProductDAO.findAll({

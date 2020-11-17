@@ -5,9 +5,9 @@ export interface myAdminDAOType {
     loginUser: string
     loginPassword: string
     email?: string
-    ctime: number
+    ctime: string
 }
-export const MyAdminDAO:ModelCtor<Model> = sequelize.define("myadmin", {
+export const MyAdminDAO: ModelCtor<Model> = sequelize.define("myadmin", {
     // 用户名
     loginUser: {
         type: DataTypes.STRING,

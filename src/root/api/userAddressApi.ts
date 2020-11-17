@@ -18,19 +18,17 @@ router.get("/:id", async (req, res, next) => {
     await getIdHandler<UserAddressDAOType>(req, res, next, findOne);
 })
 
-function verify(item: UserAddressDAOType) {
-    for (const key in item) {
-        if (Object.prototype.hasOwnProperty.call(item, key)) {
-            if (!item[key]) {
-                return `${key} 属性不存在`
-            }
+function verify(item: UserAddressDAOType, keys: string[]) {
+    for (const key of keys) {
+        if (!item[key]) {
+            return `${key} 属性不存在`
         }
     }
     return false;
 }
 
 router.post('/', async (req, res, next) => {
-    await postHandler<UserAddressDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<UserAddressDAOType>(req, res, next, addOne, addMore, verify, ['userId', 'province', 'city', 'area', 'detail', 'name']);
 })
 
 router.put('/:id', async (req, res, next) => {

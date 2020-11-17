@@ -39,7 +39,7 @@ export interface postHandleInt<T> {
     (data: T): Promise<T>
 }
 export interface verifyInt<T> {
-    (item: T): string | boolean
+    (item: T, keys: string[]): string | boolean
 }
 
 // 返回对象函数
@@ -106,12 +106,12 @@ export const getIdHandler = async <T>(req: Request, res: Response, next: NextFun
     }
 }
 
-export const postHandler = async <T>(req: Request, res: Response, next: NextFunction, handle: postHandleInt<T>, handleAll: postAllHandleInt<T>, verify: verifyInt<T>) => {
+export const postHandler = async <T>(req: Request, res: Response, next: NextFunction, handle: postHandleInt<T>, handleAll: postAllHandleInt<T>, verify: verifyInt<T>, keys: string[]) => {
     let data = req.body.data;
     // 添加多个
     if (Array.isArray(data)) {
         data = data.filter((item) => {
-            return !verify(item);
+            return !verify(item, keys);
         })
         const result = await handleAll(data);
         res.json(getResObj(200, "添加成功", result));
@@ -120,7 +120,8 @@ export const postHandler = async <T>(req: Request, res: Response, next: NextFunc
     data = req.body;
 
     // 添加一个
-    let flag = verify(data);
+    let flag = verify(data, keys);
+    console.log(flag);
     if (!flag) {
         let result = await handle(data);
         res.json(getResObj(200, "添加成功", result));

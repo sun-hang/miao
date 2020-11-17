@@ -34,7 +34,7 @@ router.get('/:id', async (req, res, next) => {
  * 验证数据是否合格
  * @param item 
  */
-function verify(item: bigPicDAOType) {
+function verify(item: bigPicDAOType, keys: string[]) {
     if (!item.imgsrc) {
         return "imgSrc 属性不存在"
     }
@@ -45,7 +45,7 @@ function verify(item: bigPicDAOType) {
  * 添加一个或多个
  */
 router.post('/', async (req, res, next) => {
-    await postHandler<bigPicDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<bigPicDAOType>(req, res, next, addOne, addMore, verify, ['']);
 })
 
 /**

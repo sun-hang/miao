@@ -17,20 +17,17 @@ router.get('/:id', async (req, res, next) => {
     await getIdHandler<smallAdDAOType>(req, res, next, findOne);
 })
 
-function verify(item: smallAdDAOType) {
-    for (const key in item) {
-        if (Object.prototype.hasOwnProperty.call(item, key)) {
-            if (!item[key]) {
-                return `${key} 属性不存在`;
-            }
+function verify(item: smallAdDAOType,keys:string[]) {
+    for (const key of keys) {
+        if (!item[key]) {
+            return `${key} 属性不存在`
         }
     }
-
     return false;
 }
 
 router.post('/', async (req, res, next) => {
-    await postHandler<smallAdDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<smallAdDAOType>(req, res, next, addOne, addMore, verify,['title','content','imgsrc','price','mintitle']);
 })
 
 router.put('/:id', async (req, res, next) => {

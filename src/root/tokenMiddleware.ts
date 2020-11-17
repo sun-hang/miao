@@ -1,8 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import path from 'path';
+import { ne } from "sequelize/types/lib/operators";
 import { verify } from "./jwt";
-const whiteList = ['/', '/index.html', '/admin/index.html', '/api/user/login', '/api/user/logon', '/api/myuser/login'];
+const whiteList = ['/', '/index.html', '/admin/index.html', '/api/user/login', '/api/user/logon', '/api/myuser/login','/api/captcha'];
 const userWhiteList = ['/api/user'];
+
+/**
+ * 
+ * @param item 
+ * @param pathname  返回true 数组内没有满足条件的
+ */
+function verifyPath(item: string[], pathname: string): boolean {
+    let len = item.filter(i => {
+        return pathname.startsWith(i);
+    })
+    return len.length === 0;
+}
+
+// 通过之后return 否则会报错
 export default async (req: Request, res: Response, next: NextFunction) => {
     if ((whiteList.includes(req.url) || path.extname(req.url) && (req.method !== 'DELETE' && req.method !== "PUT"))) {
         next();
@@ -32,20 +47,29 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             next()
             return;
         }
+        if (req.method == "POST" && (req.url === '/api/myuser' || req.url === '/api/user')) {
+            next()
+            return;
+        }
     }
 
     // 有就是买家登录
     if (token) {
-        let okWhiteList = ['/api/comment', '/api/purchaselog', '/api/shoppingcart']
-        // 不能获取所有用户  不能获取超级用户
-        if ((req.method === 'PUT' || req.method == "DELETE") && (req.url.startsWith('/api/comment') || req.url.startsWith('/api/purchaselog') || req.url.startsWith('/api/shoppingcart'))) {
-            next();
+        let okWhiteList = ['/api/comment', '/api/purchaselog', '/api/shoppingcart', '/api/useraddress', '/api/user'];
+        let noWhiteList = ['/api/bigad', '/api/bigpic', '/api/news', '/api/product', '/api/productdata', '/api/smallad'];
+        // 不能获取所有用户  不能获取超级用户 可以添加地址，上传只能等于/api/updata/images
+        // 可以写一个判断的，但太多了，可读性差，可扩展性差
+        //如果路径是超级用户开头的路径不许通过，如果请求放法是POST路径是/api/updata/images 可以通过 
+        // 如果是get请求并且路径等于/api/user 不能通过 普通用户无权获取所有用户列表
+        // 黑名单不能通过
+        // 如果是put和delete请求post，可以请求的白名单路径包含的话可以通过  verifPath判断ok白名单需要筛选len大于1，大于返回false 所以此处要取反
+        if (req.method === 'GET' && !verifyPath(noWhiteList, req.url)) {
+            next()
+            return
         }
-        if (
-            !(req.method === "GET" && req.url === '/api/user') &&
-            !req.url.startsWith('/api/myuser')
-        ) {
-
+        if ((!(req.method == "GET" && req.url == '/api/user')) && ((req.method === 'PUT' || req.method == "DELETE" || req.method == "POST") && verifyPath(noWhiteList, req.url)) && !verifyPath(okWhiteList, req.url) && (!req.url.startsWith('/api/myuser') || (req.method == 'POST' && req.url === '/api/updata/images'))) {
+            next();
+            return
         }
     }
     // 所有都不符合，重定向到首页  之后可能会改

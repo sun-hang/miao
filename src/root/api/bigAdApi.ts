@@ -32,7 +32,7 @@ router.get('/', async (req, res, next) => {
  * 验证参数是否合格
  * @param item 验证参数
  */
-function verify(item: bidAdDAOType) {
+function verify(item: bidAdDAOType, keys: string[]) {
     if (!item.title) {
         return "title 属性不存在"
     }
@@ -52,7 +52,7 @@ function verify(item: bidAdDAOType) {
  * 添加一个用户
  */
 router.post('/', async (req, res, next) => {
-    await postHandler<bidAdDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<bidAdDAOType>(req, res, next, addOne, addMore, verify, ['']);
 })
 
 /**

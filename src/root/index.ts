@@ -22,7 +22,7 @@ app.use(session({
     secret: "ssflovefmm",
     cookie: {
         maxAge: 60 * 1000 * 60 * 24 * 7,
-        httpOnly:false
+        httpOnly: false
     },
     name: "sessionid"
 }));
@@ -47,7 +47,8 @@ app.use(exporess.urlencoded({
 // 解析文本格式
 app.use(exporess.text());
 
-
+// 验证码
+app.use('/api/captcha', require('./api/captchaApi').default)
 
 // 首屏大广告处理路由
 app.use('/api/bigad', require('./api/bigAdApi').default)

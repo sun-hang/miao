@@ -27,7 +27,7 @@ router.get('/:id', async (req, res, next) => {
     await getIdHandler<newsDAOType>(req, res, next, findOne);
 })
 
-function verify(item: newsDAOType) {
+function verify(item: newsDAOType, keys: string[]) {
     if (!item.content) {
         return "content 属性不存在"
     }
@@ -56,7 +56,7 @@ function verify(item: newsDAOType) {
 }
 
 router.post('/', async (req, res, next) => {
-    await postHandler<newsDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<newsDAOType>(req, res, next, addOne, addMore, verify, ['']);
 })
 
 router.put('/:id', async (req, res, next) => {

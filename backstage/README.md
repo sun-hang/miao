@@ -1,4 +1,4 @@
-# backstage
+# app
 
 ## Project setup
 ```

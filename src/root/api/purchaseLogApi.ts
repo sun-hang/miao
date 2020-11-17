@@ -17,19 +17,17 @@ router.get('/user/:id', async (req, res, next) => {
     await getIdHandler<ShoppingCartDAOType[]>(req, res, next, findByUserId);
 })
 
-function verify(item: ShoppingCartDAOType) {
-    for (const key in item) {
-        if (Object.prototype.hasOwnProperty.call(item, key)) {
-            if (!item[key]) {
-                return `${key} 属性不存在`
-            }
+function verify(item: ShoppingCartDAOType, keys: string[]) {
+    for (const key of keys) {
+        if (!item[key]) {
+            return `${key} 属性不存在`
         }
     }
     return false;
 }
 
 router.post('/', async (req, res, next) => {
-    await postHandler<ShoppingCartDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<ShoppingCartDAOType>(req, res, next, addOne, addMore, verify,["userId","productId","productDataId",'number','remarks']);
 })
 
 router.put('/:id', async (req, res, next) => {

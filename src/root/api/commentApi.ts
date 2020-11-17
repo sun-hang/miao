@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
     await getIdHandler<commentDAOType>(req, res, next, findOne);
 })
 
-function verify(item: commentDAOType) {
+function verify(item: commentDAOType, keys: string[]) {
     if (!item.content) {
         return "属性 conent 不存在"
     }
@@ -66,7 +66,7 @@ function verify(item: commentDAOType) {
  * 添加多个
  */
 router.post('/', async (req, res, next) => {
-    await postHandler<commentDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<commentDAOType>(req, res, next, addOne, addMore, verify, ['']);
 })
 
 /**

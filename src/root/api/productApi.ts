@@ -6,12 +6,13 @@ const router = Router();
 
 router.get('/', async (req, res, next) => {
     let tag: string = req.query.tag ? req.query.tag as string : "";
+    let name: string = req.query.name ? req.query.name as string : "";
     let page = parseInt(req.query.page as string);
     let size = parseInt(req.query.size as string);
 
     // 分页查询
     if (page > 0 && size > 0) {
-        const result = await findByPageAndTag(page, size, tag);
+        const result = await findByPageAndTag(page, size, tag, name);
         res.json(getResObj(200, "请求成功", result));
     } else {
         const result = await findAll();
@@ -28,13 +29,11 @@ router.get('/:id', async (req, res, next) => {
     await getIdHandler<ProductDAOType>(req, res, next, findById);
 })
 
-function verify(item: ProductDAOType) {
+function verify(item: ProductDAOType, keys: string[]) {
 
-    for (const key in item) {
-        if (Object.prototype.hasOwnProperty.call(item, key)) {
-            if (!item[key]) {
-                return `${key} 属性不存在`;
-            }
+    for (const key of keys) {
+        if (!item[key]) {
+            return `${key} 属性不存在`;
         }
     }
 
@@ -55,7 +54,7 @@ function verify(item: ProductDAOType) {
 }
 
 router.post('/', async (req, res, next) => {
-    await postHandler<ProductDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<ProductDAOType>(req, res, next, addOne, addMore, verify, ['productName', 'originalPrice', 'nowPrice', 'listImgSrc', 'adImgSrc', 'synopsis', 'synopsisImgSrc']);
 })
 
 router.put('/:id', async (req, res, next) => {

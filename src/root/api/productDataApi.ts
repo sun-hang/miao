@@ -17,12 +17,10 @@ router.get('/product/:id', async (req, res, next) => {
     await getIdHandler<ProductDataDAOType[]>(req, res, next, findProductId);
 })
 
-function verify(item: ProductDataDAOType) {
-    for (const key in item) {
-        if (Object.prototype.hasOwnProperty.call(item, key)) {
-            if (!item[key]) {
-                return `${key} 属性不存在`
-            }
+function verify(item: ProductDataDAOType, keys: string[]) {
+    for (const key of keys) {
+        if (!item[key]) {
+            return `${key} 属性不存在`
         }
     }
 
@@ -38,7 +36,7 @@ function verify(item: ProductDataDAOType) {
 }
 
 router.post('/', async (req, res, next) => {
-    await postHandler<ProductDataDAOType>(req, res, next, addOne, addMore, verify);
+    await postHandler<ProductDataDAOType>(req, res, next, addOne, addMore, verify, ['productId', 'text', 'bidImgSrc', 'smallImgSrc', 'price']);
 })
 
 router.put('/:id', async (req, res, next) => {

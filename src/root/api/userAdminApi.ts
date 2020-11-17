@@ -4,6 +4,7 @@ import { addMore, addOne, updata, removeMore, removeOne, findAll, findByName, fi
 import { userAdminDAOType } from '../../dao/userAdminDAO';
 import md5 from 'md5';
 import { publish } from '../jwt';
+import { validateCaptcha } from './captchaApi'; //验证验证码
 const router: Router = Router();
 
 /**
@@ -60,7 +61,7 @@ function verify(item: userAdminDAOType) {
  * data 添加多个 没有添加一个
  * loginUser，loginPassword imgSrc：一个默认的 Email phone sex
  */
-router.post('/', async (req, res, next) => {
+router.post('/', validateCaptcha, async (req, res, next) => {
     let data = req.body.data;
     let arr: userAdminDAOType[] = [];
     if (Array.isArray(data)) {
