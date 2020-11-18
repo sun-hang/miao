@@ -21,6 +21,7 @@
             placeholder="请输入密码"
             v-model="loginPassWord"
             @blur="onPassChangeFun"
+            type="password"
           ></el-input>
           <i class="el-icon-check" v-show="passIsTrue"></i>
           <i class="el-icon-close" v-show="passIsFalse"></i>
