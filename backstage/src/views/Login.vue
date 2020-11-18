@@ -7,7 +7,7 @@
           ><el-input
             placeholder="请输入用户名"
             @blur="onUserChangeFun"
-            v-model="loginUser"
+            v-model.trim="loginUser"
           ></el-input
           ><i class="el-icon-check" v-show="userIsTrue"></i>
           <i class="el-icon-close" v-show="userIsFalse"></i>
@@ -18,8 +18,9 @@
         <el-col :span="6">密码：</el-col>
         <el-col :span="18"
           ><el-input
+            show-password
             placeholder="请输入密码"
-            v-model="loginPassWord"
+            v-model.trim="loginPassWord"
             @blur="onPassChangeFun"
             type="password"
           ></el-input>
@@ -83,16 +84,16 @@ export default Vue.extend({
           loginPassword: this.loginPassWord,
           loginUser: this.loginUser,
         });
-        // console.log(result);
+        let self = this;
         if (result) {
           this.$notify({
             title: "成功",
             message: "登录成功",
             type: "success",
+            onClose() {
+              self.$router.push("/");
+            },
           });
-          setTimeout(() => {
-            this.$router.push("/");
-          }, 3000);
         } else {
           this.$notify({
             title: "登录失败",
