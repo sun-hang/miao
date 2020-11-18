@@ -8,7 +8,8 @@
       ><el-button round plain size="mini" @click="onLogin" v-if="!userInfo"
         >登录</el-button
       >
-      <span v-else>[{{userInfo.loginUser}}]</span>
+      <span v-else>[{{ userInfo.loginUser }}]</span>
+      <el-button round plain size="mini" style="margin-left:10px;" @click="onOutLogin" v-if="userInfo">退出登录</el-button>
     </el-col>
   </el-row>
 </template>
@@ -23,8 +24,11 @@ export default Vue.extend({
   methods: {
     onLogin() {
       if (this.$route.path !== "/login") {
-        this.$router.push("/login")
+        this.$router.push("/login");
       }
+    },
+    onOutLogin() {
+      this.$store.dispatch('outLogin')
     },
   },
   data() {

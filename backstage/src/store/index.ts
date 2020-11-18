@@ -38,6 +38,15 @@ export default new Vuex.Store({
       if (result.data.data) {
         commit('getUserInfo', result.data.data);
       }
+    },
+
+    async outLogin({ commit }) {
+      const result = await fetch('/api/myuser/out', {
+        credentials: 'include'
+      }).then(res => res.json())
+      if (result.data) {
+        commit('getUserInfo', null);
+      }
     }
   },
   modules: {

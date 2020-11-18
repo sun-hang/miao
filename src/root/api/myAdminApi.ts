@@ -11,6 +11,13 @@ router.get('/', async (req, res, next) => {
     await getHandler<myAdminDAOType>(req, res, next, findAll);
 })
 
+router.get('/out', (req, res, next) => {
+    let session: any = req.session;
+    session.myUser = null;
+    req.session = session;
+    res.json(getResObj(200, '退出成功', true))
+})
+
 router.get('/:id', async (req, res, next) => {
     await getIdHandler<myAdminDAOType>(req, res, next, findOne);
 })
@@ -55,7 +62,6 @@ router.post('/', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
     let loginUser = req.body.loginUser;
     let loginPassword = req.body.loginPassword;
-    console.log(req.body);
     if (!loginUser) {
         res.json(getResObj(200, "用户名不存在", null))
         return
