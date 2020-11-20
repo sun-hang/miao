@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Input from '../components/content/Input.vue';
 export default Vue.extend({
   data() {
     return {
@@ -53,7 +54,6 @@ export default Vue.extend({
   },
   methods: {
     onUserChangeFun() {
-      this.loginUser = this.loginUser.trim();
       if (this.loginUser.length > 4) {
         this.userIsTrue = true;
         this.userIsFalse = false;
@@ -63,7 +63,6 @@ export default Vue.extend({
       }
     },
     onPassChangeFun() {
-      this.loginPassWord = this.loginPassWord.trim();
       if (
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\s\S]{8,16}$/.test(this.loginPassWord)
       ) {

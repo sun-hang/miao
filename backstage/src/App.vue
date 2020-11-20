@@ -36,7 +36,6 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  max-height: 100vh;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

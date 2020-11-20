@@ -2,60 +2,38 @@
   <div class="bigad-box">
     <h1>添加首屏广告一</h1>
     <div class="form-box">
-      <el-row>
-        <el-col :span="4" class="title">广告标题：</el-col>
-        <el-col :span="20"
-          ><el-input
-            :suffix-icon="titleIcon"
-            validate-event
-            v-model.trim="title"
-            placeholder="请输入广告标题"
-            @blur="onBulrTitle"
-          ></el-input
-        ></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="4" class="title">广告简介：</el-col>
-        <el-col :span="20"
-          ><el-input
-            @blur="onBulrContent"
-            v-model.trim="content"
-            type="textarea"
-            :autosize="{ minRows: 2 }"
-            placeholder="请输入广告标题"
-          ></el-input
-        ></el-col>
-        <el-col
-          :offset="4"
-          :style="{
-            color: content ? '#0f0' : '#f00',
-            fontSize: '12px',
-            height: '20px',
-          }"
-          >{{ contentIcon }}</el-col
-        >
-      </el-row>
-      <el-row>
-        <el-col :span="4" class="title">广告内容：</el-col>
-        <el-col :span="20"
-          ><el-input
-            @blur="onBulrSynopsis"
-            v-model.trim="synopsis"
-            type="textarea"
-            placeholder="请输入广告标题"
-            :autosize="{ minRows: 4 }"
-          ></el-input
-        ></el-col>
-        <el-col
-          :offset="4"
-          :style="{
-            color: synopsis ? '#0f0' : '#f00',
-            fontSize: '12px',
-            height: '20px',
-          }"
-          >{{ synopsisIcon }}</el-col
-        >
-      </el-row>
+      <Input
+        title="广告标题"
+        placeholder="请输入广告标题"
+        type="text"
+        @change="
+          (item) => {
+            this.title = item;
+          }
+        "
+      />
+      <Input
+        title="广告简介"
+        placeholder="请输入广告简介"
+        type="textarea"
+        :autosize="{ minRows: 2 }"
+        @change="
+          (item) => {
+            this.synopsis = item;
+          }
+        "
+      />
+      <Input
+        title="广告内容"
+        placeholder="请输入广告内容"
+        type="textarea"
+        :autosize="{ minRows: 4 }"
+        @change="
+          (item) => {
+            this.content = item;
+          }
+        "
+      />
       <el-row>
         <el-col class="title" :span="4">
           广告展示图：
@@ -89,28 +67,20 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Input from "../../components/content/Input.vue";
 export default Vue.extend({
+  components: {
+    Input,
+  },
   data() {
     return {
       title: "",
       content: "",
       synopsis: "",
-      titleIcon: "",
-      contentIcon: "",
-      synopsisIcon: "",
       imgsrc: "",
     };
   },
   methods: {
-    onBulrTitle() {
-      this.titleIcon = this.title ? "el-icon-success" : "el-icon-error";
-    },
-    onBulrContent() {
-      this.contentIcon = this.content ? "内容格式正确" : "广告简介不能为空";
-    },
-    onBulrSynopsis() {
-      this.synopsisIcon = this.synopsis ? "内容格式正确" : "广告内容不能为空";
-    },
     upImageSuccess(response: any, file: any, fileList: any) {
       this.imgsrc = response.data.srcList[0];
     },
@@ -162,9 +132,6 @@ export default Vue.extend({
                 self.content = "";
                 self.synopsis = "";
                 self.imgsrc = "";
-                self.contentIcon = "";
-                self.synopsisIcon = '';
-                self.titleIcon = "";
               },
             });
           } else {
