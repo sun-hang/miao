@@ -54,12 +54,6 @@ const routes: Array<RouteConfig> = [
   },
   {
     // 购物记录
-    path: '/add/purchaselog',
-    name: 'AddPurchaselog',
-    component: () => import('../views/add/Purchaselog.vue')
-  },
-  {
-    // 购物记录
     path: '/list/purchaselog',
     name: 'ListPurchaselog',
     component: () => import('../views/list/Purchaselog.vue')
@@ -87,11 +81,6 @@ const routes: Array<RouteConfig> = [
     path: '/list/product',
     name: 'ListProduct',
     component: () => import('../views/list/Product.vue')
-  },
-  {
-    path: '/add/shoppingcart',
-    name: 'AddShoppingCart',
-    component: () => import('../views/add/ShoppingCart.vue')
   },
   {
     path: '/list/comment',

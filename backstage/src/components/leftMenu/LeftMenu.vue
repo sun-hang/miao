@@ -63,12 +63,6 @@
         <el-menu-item index="/add/product">
           <router-link to="/add/product">添加产品</router-link>
         </el-menu-item>
-        <el-menu-item index="/add/purchaselog">
-          <router-link to="/add/purchaselog">添加购物记录</router-link>
-        </el-menu-item>
-        <el-menu-item index="/add/shoppingcart">
-          <router-link to="/add/shoppingcart">添加购物车</router-link>
-        </el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

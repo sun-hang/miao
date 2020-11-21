@@ -53,7 +53,6 @@ export default Vue.extend({
       let str: string = this.inpValue ? "内容验证成功" : "内容格式不正确";
       this.msg = str;
       this.$emit("change", this.inpValue);
-      this.inpValue = "";
     },
   },
 });
