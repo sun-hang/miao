@@ -34,27 +34,16 @@
           }
         "
       />
-      <el-row>
-        <el-col class="title" :span="4">
-          广告展示图：
-        </el-col>
-        <el-col :span="20">
-          <el-upload
-            class="upload-demo"
-            action="/api/updata/images"
-            list-type="picture"
-            name="image"
-            :on-success="upImageSuccess"
-            :on-error="onError"
-            ref="upload"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">
-              只能上传jpg/png文件，且不超过500kb
-            </div>
-          </el-upload>
-        </el-col>
-      </el-row>
+      <Upload
+        name="image"
+        title="广告展示图"
+        @change="
+          (item) => {
+            this.imgsrc = item;
+          }
+        "
+        ref="upload"
+      ></Upload>
       <el-row>
         <el-col :span="20" :offset="4">
           <el-button @click="onUpLoad">添加</el-button>
@@ -67,10 +56,12 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Upload from "../../components/content/UploadImage.vue";
 import Input from "../../components/content/Input.vue";
 export default Vue.extend({
   components: {
     Input,
+    Upload,
   },
   data() {
     return {
@@ -127,7 +118,7 @@ export default Vue.extend({
               message: "成功添加一条数据",
               onClose() {
                 let upload: any = self.$refs.upload;
-                upload.clearFiles();
+                upload.closeImgList();
                 self.title = "";
                 self.content = "";
                 self.synopsis = "";
