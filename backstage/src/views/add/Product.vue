@@ -65,46 +65,49 @@
         ref="upload"
       ></Upload>
       <el-row>
-        <el-col :span="4">展示大图</el-col>
+        <el-col :span="4">展示大图：</el-col>
         <el-col :span="20">
           <el-upload
             action="/api/updata/images"
             list-type="picture-card"
             name="image"
             multiple
-            :auto-upload="true"
             :file-list="listImgSrc"
             :on-success="onUploadChange"
           >
             <i slot="default" class="el-icon-plus"></i>
             <div slot="file" slot-scope="{ file }">
-              <img
-                class="el-upload-list__item-thumbnail"
-                :src="file.url"
-                alt=""
-              />
-              <span class="el-upload-list__item-actions">
-                <span
-                  class="el-upload-list__item-preview"
-                  @click="handlePictureCardPreview(file)"
-                >
-                  <i class="el-icon-zoom-in"></i>
+              <template v-for="(item) in listImgSrc">
+                <img
+                  :key="item.url"
+                  class="el-upload-list__item-thumbnail"
+                  :src="'/api/download/img/' + item.name"
+                  alt=""
+                />
+                <span class="el-upload-list__item-actions" :key="item.url + 1">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(item)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <a :href="item.url"><span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(item)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  </a>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(item)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
                 </span>
-                <span
-                  v-if="!disabled"
-                  class="el-upload-list__item-delete"
-                  @click="handleDownload(file)"
-                >
-                  <i class="el-icon-download"></i>
-                </span>
-                <span
-                  v-if="!disabled"
-                  class="el-upload-list__item-delete"
-                  @click="handleRemove(file)"
-                >
-                  <i class="el-icon-delete"></i>
-                </span>
-              </span>
+              </template>
             </div>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -132,22 +135,28 @@ export default Vue.extend({
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
-      listImgSrc:[]
+      listImgSrc: [],
     };
   },
   methods: {
-    handleRemove(file: any) {
-      console.log(file);
+    handleRemove(file: string) {
+      let listImgSrc = this.listImgSrc.filter((item) => {
+        return item !== file;
+      });
+      this.listImgSrc = listImgSrc;
     },
     handlePictureCardPreview(file: any) {
-      this.dialogImageUrl = file.url;
+      this.dialogImageUrl = "/api/download/img/" + file.name;
       this.dialogVisible = true;
     },
     handleDownload(file: any) {
-      console.log(file,this.listImgSrc);
+      console.log(file.name)
+      fetch("/api/download/" + file.name).then(res =>{console.log(res)})
     },
     onUploadChange(response: any, file: any, fileList: any) {
-      console.log(response)
+      let arr: any[] = response.data.srcList;
+      arr = arr.map((item) => { return {name:item,url:"/api/download/img/" + item} })
+      this.listImgSrc.push(...arr as []);
     },
   },
   components: {
