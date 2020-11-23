@@ -112,6 +112,18 @@
           </el-dialog>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="4">添加视频：</el-col>
+        <el-col :span="20">
+          <input
+            type="file"
+            @change="onVideoChange"
+            style="display:none;"
+            ref="inp"
+          />
+          <el-button @click="onVideoBtn">点击上传</el-button>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -132,22 +144,35 @@ export default Vue.extend({
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
-      listImgSrc:[]
+      listImgSrc: [],
     };
   },
   methods: {
+    // 删除文件列表
     handleRemove(file: any) {
       console.log(file);
     },
+    // 展示列表大图
     handlePictureCardPreview(file: any) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
+    // 下载列表展示图
     handleDownload(file: any) {
-      console.log(file,this.listImgSrc);
+      console.log(file, this.listImgSrc);
     },
+    // 上传图片列表
     onUploadChange(response: any, file: any, fileList: any) {
-      console.log(response)
+      console.log(response);
+    },
+    //视频上传变换事件
+    onVideoChange(e: any) {
+      console.log(e);
+    },
+    // 视频上传按钮点击事件
+    onVideoBtn() {
+      let inp: any = this.$refs.inp;
+      inp.click();
     },
   },
   components: {
