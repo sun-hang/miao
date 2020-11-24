@@ -417,7 +417,7 @@ export default Vue.extend({
           this.$store.commit('getProductId',res.data.id);
           let listImgSrc:any = this.$refs.listImgSrc;
           listImgSrc.clearFiles();
-          this.listImgSrc = [];
+          this.listImgSrc = []; 
         });
     },
     // 添加产品数据按钮
