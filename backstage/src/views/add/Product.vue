@@ -182,7 +182,6 @@ export default Vue.extend({
     onVideoBtn() {
       let inp: any = this.$refs.inp;
       inp.click();
-      
     },
   },
   components: {
