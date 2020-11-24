@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userInfo: null
+    userInfo: null, //用户登录信息
+    productId: null //产品id
   },
   mutations: {
     getUserInfo(state, info) {
       state.userInfo = info
+    },
+    getProductId(state, info) {
+      state.productId = info;
     }
   },
   actions: {

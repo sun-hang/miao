@@ -37,12 +37,12 @@ export const ProductDAO: ModelCtor<Model> = sequelize.define('product', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    // 列表展示图片地址
+    // 广告展示地址，多个可以是视频
     listImgSrc: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    // 广告展示地址，多个可以是视频
+    // 列表展示图片地址
     adImgSrc: {
         type: DataTypes.STRING,
         allowNull: false

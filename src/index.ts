@@ -7,7 +7,7 @@ import { bidAdDAOType } from './dao/bigAdDAO'
 import { findAll, findByName, findOne } from './services/userAdminSer'
 import { UserAdminDAO } from './dao/userAdminDAO'
 // bigad.addOne({ title: "这是标题", content: "这是内容", synopsis: "这是简介", imgsrc: '这是图片链接' }).then(res => {
-//     console.log(res);
+//     console.log(res); 
 // })
 
 //bigad.addMore([{ title: "这是标题", content: "这是内容", synopsis: "这是简介", imgsrc: '这是图片链接' },{ title: "这是标题", content: "这是内容", synopsis: "这是简介", imgsrc: '这是图片链接' }])

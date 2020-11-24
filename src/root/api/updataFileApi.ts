@@ -25,14 +25,15 @@ const uploadImage = multer({
     storage,
     limits: {
         fields: 10,
-        fileSize: 1024 * 1024 * 100
+        fileSize: 1024 * 1024 * 1000
     }
 })
 
 function handler(req: Request, res: Response, next: NextFunction) {
+
     let data = Object.values(req.files);
-    let srcs: string[] = [];
     console.log(data);
+    let srcs: string[] = [];
     data.forEach((item) => {
         srcs.push(item.filename);
     })
@@ -47,6 +48,7 @@ router.post('/images', uploadImage.array('image', 16), async (req, res, next) =>
 })
 
 router.post('/file', uploadImage.array('files', 16), async (req, res, next) => {
+    console.log(111);
     handler(req, res, next);
 })
 
