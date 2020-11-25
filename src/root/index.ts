@@ -12,6 +12,7 @@ const rootPath = path.resolve('', './public');
 // 跨域处理
 app.use(cors({
     origin(origin, cd) {
+        console.log(origin)
         cd(null, true)
     },
     credentials: true,
@@ -31,7 +32,12 @@ app.use(session({
     name: "sessionid"
 }));
 
-
+app.use((req,res,next) =>{
+    console.log(req.session)
+    console.log(req.headers)
+    console.log(req.cookies)
+    next()
+})
 app.use(require('./tokenMiddleware').default)
 
 // 图片防盗链

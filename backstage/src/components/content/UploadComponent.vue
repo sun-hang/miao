@@ -1,36 +1,112 @@
 <template>
-  <div class="upload-box">
-    <div class="item">
-      <img src="/api/download/img/1160630241614384.jpg" alt="" />
-      <div class="drop">
-        <i class="el-icon-zoom-in"></i>
-        <i class="el-icon-delete"></i>
+  <div style="width:100%;">
+    <div class="upload-box">
+      <div
+        class="item"
+        :style="{
+          animation: 'items 1s forwards',
+          animationDelay: index * 0.1 + 's',
+        }"
+        v-for="(item, index) in imgsrc"
+        :key="item + index"
+      >
+        <img :src="'/api/download/img/' + item" alt="" />
+        <div class="drop">
+          <i
+            class="el-icon-zoom-in"
+            @click="showView('/api/download/img/' + item)"
+          ></i>
+          <i class="el-icon-delete" @click="removeImg(item)"></i>
+        </div>
+      </div>
+      <div class="inp-box" @click="fileInpClick">
+        <i class="el-icon-plus"></i>
+        <input
+          type="file"
+          :name="name ? name : 'image'"
+          ref="inp"
+          :multiple="multiple ? multiple : ''"
+          @change="inpChangeFun"
+          v-if="multiple"
+        />
+        <input
+          type="file"
+          :name="name ? name : 'image'"
+          ref="inp"
+          v-else
+          @change="inpChangeFun"
+        />
+      </div>
+      <div class="view" v-show="isShowView">
+        <i class="el-icon-close" @click="colesView"></i>
+        <img :src="viewSrc" alt="" />
       </div>
     </div>
-    <div class="inp-box">
-      <i class="el-icon-plus"></i>
-      <input
-        type="file"
-        :name="name ? name : 'image'"
-        ref="inp"
-        :multiple="multiple ? multiple : ''"
-      />
-    </div>
-    <div class="view">
-      <i class="el-icon-close"></i>
-      <img src="/api/download/img/1160630241614384.jpg" alt="" />
-    </div>
+    <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
-  props: ["name", "multiple", "action", "auto-upload"],
+  props: ["name", "multiple", "action", "autoUpload", "success", "onChange"],
   data() {
     return {
       fileList: [],
+      imgsrc: [],
+      viewSrc: "",
+      isShowView: false,
     };
+  },
+  methods: {
+    colesView() {
+      this.isShowView = false;
+    },
+    showView(src: string) {
+      this.viewSrc = src;
+      this.isShowView = true;
+    },
+    removeImg(src: string) {
+      this.imgsrc = this.imgsrc.filter((item) => {
+        return item != src;
+      });
+    },
+    fileInpClick() {
+      let inp: any = this.$refs.inp;
+      inp.click();
+    },
+    onSubmit() {
+      if (!this.action) {
+        return;
+      }
+      let formdata = new FormData();
+      let name = this.name ? this.name : "image";
+      for (let i = 0; i < this.fileList.length; i++) {
+        const element = this.fileList[i];
+        formdata.append(name, element);
+      }
+      fetch(this.action, {
+        method: "post",
+        body: formdata,
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          let list = res.data.srcList;
+          this.imgsrc = [...this.imgsrc, ...list] as never[];
+          this.success && this.success(this.imgsrc);
+        });
+    },
+    inpChangeFun(e: any) {
+      this.fileList = [...e.target.files] as never[];
+      if (this.autoUpload) {
+        this.onSubmit();
+      }
+      this.onChange && this.onChange();
+    },
+    closeImgList() {
+      this.imgsrc = [];
+    },
   },
 });
 </script>
@@ -39,9 +115,10 @@ export default Vue.extend({
 /* 整个容器的样式 */
 .upload-box {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   position: relative;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -56,6 +133,7 @@ export default Vue.extend({
   align-items: center;
   cursor: pointer;
   box-sizing: border-box;
+  margin: 10px;
 }
 
 .upload-box .inp-box:hover {
@@ -80,6 +158,8 @@ export default Vue.extend({
   overflow: hidden;
   box-sizing: border-box;
   position: relative;
+  margin: 10px;
+  opacity: 0;
 }
 .upload-box .item img {
   width: 100%;
@@ -118,9 +198,12 @@ export default Vue.extend({
   width: 100vw;
   height: 100vh;
   position: fixed;
+  overflow: auto;
   left: 0;
   top: 0;
+  transition: all 0.5s;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
   /* display: none; */
 }
 .upload-box .view img {
@@ -143,7 +226,18 @@ export default Vue.extend({
   font-weight: 600;
   font-size: 16px;
 }
-.upload-box .view .el-icon-close:hover{
+.upload-box .view .el-icon-close:hover {
   color: #f40;
+}
+
+@keyframes items {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

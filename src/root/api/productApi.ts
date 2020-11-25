@@ -42,6 +42,7 @@ function verify(item: ProductDAOType, keys: string[]) {
     }
 
     let listImgSrc: string[] = JSON.parse(item.listImgSrc);
+    console.log(listImgSrc);
     listImgSrc = listImgSrc.filter((item) => {
         return !/^.+(\.jpg|\.png|\.jpeg|\.gif)$/.test(item);
     })

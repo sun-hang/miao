@@ -106,105 +106,30 @@
       <el-row>
         <el-col :span="4">展示大图：</el-col>
         <el-col :span="20">
-          <el-upload
+          <upload-component
             action="/api/updata/images"
-            list-type="picture-card"
+            :autoUpload="true"
             name="image"
-            multiple
+            :multiple="true"
             ref="listImgSrc"
-            :on-success="onUploadChangeListImgSrc"
+            :success="onUploadChangeListImgSrc"
+            >点击上传</upload-component
           >
-            <i slot="default" class="el-icon-plus"></i>
-            <div slot="file" slot-scope="{ file }">
-              <template v-for="item in listImgSrc">
-                <img
-                  :key="item.url"
-                  class="el-upload-list__item-thumbnail"
-                  :src="'/api/download/img/' + item.name"
-                  alt=""
-                />
-                <span class="el-upload-list__item-actions" :key="item.url + 1">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(item)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <a :href="item.url"
-                    ><span
-                      v-if="!disabled"
-                      class="el-upload-list__item-delete"
-                      @click="handleDownload(item)"
-                    >
-                      <i class="el-icon-download"></i>
-                    </span>
-                  </a>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemoveListImgSrc(item)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </template>
-            </div>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog>
         </el-col>
       </el-row>
       <!-- 产品页详情展示图 -->
       <el-row>
         <el-col :span="4">产品介绍大图：</el-col>
         <el-col :span="20">
-          <el-upload
+          <upload-component
             action="/api/updata/images"
-            list-type="picture-card"
+            :autoUpload="true"
             name="image"
-            multiple
-            :on-success="onUploadChangeSynopsisList"
+            :multiple="true"
+            ref="synopsisList"
+            :success="onUploadChangeSynopsisList"
+            >点击上传</upload-component
           >
-            <i slot="default" class="el-icon-plus"></i>
-            <div slot="file" slot-scope="{ file }">
-              <template v-for="item in synopsisList">
-                <img
-                  :key="item.url"
-                  class="el-upload-list__item-thumbnail"
-                  :src="'/api/download/img/' + item.name"
-                  alt=""
-                />
-                <span class="el-upload-list__item-actions" :key="item.url + 1">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(item)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <a :href="item.url"
-                    ><span
-                      v-if="!disabled"
-                      class="el-upload-list__item-delete"
-                      @click="handleDownload(item)"
-                    >
-                      <i class="el-icon-download"></i>
-                    </span>
-                  </a>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemoveSynopsisList(item)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </template>
-            </div>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog>
         </el-col>
       </el-row>
       <!-- 产品页上传视频页 -->
@@ -224,7 +149,9 @@
       <el-row style="margin-top:20px;">
         <el-col :offset="4" :span="20">
           <el-button @click="updataClick">提交</el-button>
-          <el-button>添加产品子项</el-button>
+          <el-popover placement="top" width="800" trigger="click">
+            <el-button slot="reference">添加产品子项</el-button>
+          </el-popover>
         </el-col>
       </el-row>
     </div>
@@ -235,6 +162,7 @@
 import Vue from "vue";
 import Input from "../../components/content/Input.vue";
 import Upload from "../../components/content/UploadImage.vue";
+import UploadComponent from "../../components/content/UploadComponent.vue";
 import { errorAlert, upload } from "../utli";
 export default Vue.extend({
   data() {
@@ -248,64 +176,27 @@ export default Vue.extend({
       detail: "", //产品详情
       adImgSrc: "", //产品列表展示图
       tags: [], //产品标签
-      dialogImageUrl: "", //上传图片列表查看大图路径
-      dialogVisible: false, //上传图片列表锁
-      disabled: false, //图片列表按钮显示锁
       listImgSrc: [], //大图展示图片列表
       synopsisList: [], //介绍图片列表
       videoSrc: "", //上传视频地址
     };
   },
   methods: {
-    // 删除图片列表项
-    handleRemoveListImgSrc(file: string) {
-      let listImgSrc = this.listImgSrc.filter((item) => {
-        return item !== file;
-      });
-      this.listImgSrc = listImgSrc;
-    },
-    handleRemoveSynopsisList(file: string) {
-      let synopsisList = this.synopsisList.filter((item) => {
-        return item !== file;
-      });
-      this.synopsisList = synopsisList;
-    },
-    // 展示列表大图
-    handlePictureCardPreview(file: any) {
-      this.dialogImageUrl = "/api/download/img/" + file.name;
-      this.dialogVisible = true;
-    },
-    // 下载列表展示图
-    handleDownload(file: any) {
-      console.log(file, this.listImgSrc);
-      console.log(file.name);
-      fetch("/api/download/" + file.name).then((res) => {
-        console.log(res);
-      });
-    },
     // 上传图片列表
-    onUploadChangeListImgSrc(response: any, file: any, fileList: any) {
-      let arr: any[] = response.data.srcList;
-      arr = arr.map((item) => {
-        return { name: item, url: "/api/download/img/" + item };
-      });
-      this.listImgSrc.push(...(arr as []));
+    onUploadChangeListImgSrc(item: never[]) {
+      this.listImgSrc = [...item];
     },
     // 产品介绍图上传
-    onUploadChangeSynopsisList(response: any, file: any, fileList: any) {
-      let arr: any[] = response.data.srcList;
-      arr = arr.map((item) => {
-        return { name: item, url: "/api/download/img/" + item };
-      });
-      this.synopsisList.push(...(arr as []));
+    onUploadChangeSynopsisList(item: never[]) {
+      this.synopsisList = [...item];
     },
     //视频上传变换事件
     onVideoChange(e: any) {
       let formdata = new FormData();
       let self = this;
       formdata.append("files", e.target.files[0]);
-      fetch("http://127.0.0.1:9527/api/updata/file", {
-        method: "POST",
+      fetch("/api/updata/file", {
+        method: "post",
         body: formdata,
         credentials: "include",
       })
@@ -382,7 +273,7 @@ export default Vue.extend({
         return;
       }
 
-      if(this.videoSrc){
+      if (this.videoSrc) {
         this.listImgSrc.unshift(this.videoSrc as never);
       }
 
@@ -395,18 +286,10 @@ export default Vue.extend({
           productName: this.productName,
           originalPrice: this.originalPrice,
           nowPrice: this.nowPrice,
-          listImgSrc: JSON.stringify(
-            this.listImgSrc.map((item: any) => {
-              return item.name;
-            })
-          ),
+          listImgSrc: JSON.stringify(this.listImgSrc),
           adImgSrc: this.adImgSrc,
           synopsis: this.synopsis,
-          synopsisImgSrc: JSON.stringify(
-            this.synopsisList.map((item: any) => {
-              return item.name;
-            })
-          ),
+          synopsisImgSrc: JSON.stringify(this.synopsisList),
           detail: this.detail,
           tag: this.tags.toString(),
         }),
@@ -414,20 +297,30 @@ export default Vue.extend({
       })
         .then((res) => res.json())
         .then((res) => {
-          this.$store.commit('getProductId',res.data.id);
-          let listImgSrc:any = this.$refs.listImgSrc;
-          listImgSrc.clearFiles();
-          this.listImgSrc = []; 
+          this.$store.commit("getProductId", res.data.id);
+          let listImgSrc: any = this.$refs.listImgSrc;
+          let synopsisList: any = this.$refs.synopsisList;
+          let upload: any = this.$refs.upload;
+          upload.closeImgList();
+          synopsisList.closeImgList();
+          listImgSrc.closeImgList();
+          this.listImgSrc = [];
+          this.synopsisList = [];
+          this.tags = [];
+          this.productName = "";
+          this.nowPrice = null;
+          this.originalPrice = null;
+          this.synopsis = "";
+          this.detail = "";
         });
     },
     // 添加产品数据按钮
-    addProdcutDataClick() {
-
-    },
+    addProdcutDataClick() {},
   },
   components: {
     Input,
     Upload,
+    UploadComponent,
   },
 });
 </script>

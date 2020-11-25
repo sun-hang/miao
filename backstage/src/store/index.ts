@@ -34,13 +34,13 @@ export default new Vuex.Store({
       }
     },
     async getWhoami({ commit }) {
-      const result = await axios({
-        url: 'http://127.0.0.1:9527/api/myuser/whoami',
-        method: "POST",
-        withCredentials: true
-      })
-      if (result.data.data) {
-        commit('getUserInfo', result.data.data);
+      const result = await fetch('/api/myuser/whoami', {
+        method: 'post',
+        credentials: 'include'
+      }).then(res => res.json());
+      console.log(result)
+      if (result.data) {
+        commit('getUserInfo', result.data);
       }
     },
 

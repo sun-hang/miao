@@ -2,7 +2,11 @@
   <div>
     <!-- 首页主页 -->
     <h1>这是首页</h1>
-    <upload-component></upload-component>
+    <upload-component
+      action="/api/updata/images"
+      name="image"
+      :autoUpload="true"
+    ></upload-component>
   </div>
 </template>
 

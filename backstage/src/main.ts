@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 let pathname: string = '';
 store.dispatch('getWhoami').then(() => {
+  console.log('123')
   router.replace(pathname);
 })
 router.beforeEach((to, from, next) => {
