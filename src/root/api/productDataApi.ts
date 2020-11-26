@@ -18,12 +18,28 @@ router.get('/product/:id', async (req, res, next) => {
 })
 
 function verify(item: ProductDataDAOType, keys: string[]) {
-    for (const key of keys) {
-        if (!item[key]) {
-            return `${key} 属性不存在`
-        }
+    console.log(item)
+    // for (const key of keys) {
+    //     console.log(item[key])
+    //     if (!item[key]) {
+    //         return `${key} 属性不存在`
+    //     }
+    // }
+    if(!item.productId){
+        return `productId属性不存在`
     }
-
+    if(!item.price){
+        return `price属性不存在`
+    }
+    if(!item.smallImgSrc){
+        return `smallImgSrc属性不存在`
+    }
+    if(!item.text){
+        return `text属性不存在`
+    }
+    if(!item.bidImgSrc){
+        return `bidImgSrc属性不存在`
+    }
     if (!/^.+(\.jpg|\.png|\.jpeg|\.gif)$/.test(item.bidImgSrc)) {
         return "bidImgSrc 属性格式不存在"
     }
@@ -36,6 +52,7 @@ function verify(item: ProductDataDAOType, keys: string[]) {
 }
 
 router.post('/', async (req, res, next) => {
+    console.log(req.body);
     await postHandler<ProductDataDAOType>(req, res, next, addOne, addMore, verify, ['productId', 'text', 'bidImgSrc', 'smallImgSrc', 'price']);
 })
 

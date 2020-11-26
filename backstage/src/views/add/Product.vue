@@ -149,9 +149,14 @@
       <el-row style="margin-top:20px;">
         <el-col :offset="4" :span="20">
           <el-button @click="updataClick">提交</el-button>
-          <el-popover placement="top" width="800" trigger="click">
-            <el-button slot="reference">添加产品子项</el-button>
-          </el-popover>
+
+          <el-button @click="dialogFormVisible = true">添加产品子项</el-button>
+          <el-dialog
+            title="添加产品数据"
+            :visible.sync="dialogFormVisible"
+          >
+          <ProductData />
+          </el-dialog>
         </el-col>
       </el-row>
     </div>
@@ -164,6 +169,7 @@ import Input from "../../components/content/Input.vue";
 import Upload from "../../components/content/UploadImage.vue";
 import UploadComponent from "../../components/content/UploadComponent.vue";
 import { errorAlert, upload } from "../utli";
+import ProductData from "../../components/productData/ProductData.vue";
 export default Vue.extend({
   data() {
     return {
@@ -179,6 +185,7 @@ export default Vue.extend({
       listImgSrc: [], //大图展示图片列表
       synopsisList: [], //介绍图片列表
       videoSrc: "", //上传视频地址
+      dialogFormVisible: false,
     };
   },
   methods: {
@@ -297,7 +304,7 @@ export default Vue.extend({
       })
         .then((res) => res.json())
         .then((res) => {
-          this.$store.commit("getProductId", res.data.id);
+          this.$store.commit("getProductId", res.data);
           let listImgSrc: any = this.$refs.listImgSrc;
           let synopsisList: any = this.$refs.synopsisList;
           let upload: any = this.$refs.upload;
@@ -321,6 +328,7 @@ export default Vue.extend({
     Input,
     Upload,
     UploadComponent,
+    ProductData,
   },
 });
 </script>

@@ -7,8 +7,9 @@ export const errorAlert = (title: string, message: string, self: any) => {
 }
 
 export const upload = async (path: string, option: any, cd: Function, self: any) => {
-    const res: any = await fetch("/api/bigad", option)
+    const res: any = await fetch(path, option)
         .then((res) => res.json())
+        console.log(res);
     if (res.data) {
         self.$notify({
             title: "添加成功",

@@ -32,12 +32,12 @@ app.use(session({
     name: "sessionid"
 }));
 
-app.use((req,res,next) =>{
-    console.log(req.session)
-    console.log(req.headers)
-    console.log(req.cookies)
-    next()
-})
+// app.use((req,res,next) =>{
+//     console.log(req.session)
+//     console.log(req.headers)
+//     console.log(req.cookies)
+//     next()
+// })
 app.use(require('./tokenMiddleware').default)
 
 // 图片防盗链
