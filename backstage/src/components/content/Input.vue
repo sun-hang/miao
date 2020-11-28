@@ -27,10 +27,10 @@
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
-  props: ["title", "placeholder", "type", "autosize",'show-password'],
+  props: ["title", "placeholder", "type", "autosize",'show-password',"value"],
   data() {
     return {
-      inpValue: "",
+      inpValue: this.value,
       iconName: "",
       msg: "",
     };

@@ -6,6 +6,8 @@
         title="广告主标题"
         placeholder="请输入广告主标题"
         type="text"
+        :value="title"
+        :key="title"
         @change="
           (item) => {
             this.title = item;
@@ -33,18 +35,18 @@
           }
         "
       />
-      <el-row>
-        <el-col :span="4" class="title">产品价格：</el-col>
-        <el-col :span="18">
-          <el-input
-            placeholder="请输入产品价格"
-            v-model.number="price"
-            clearable
-            :suffix-icon="priceIcon"
-            @blur="priceChangeFun"
-          ></el-input>
-        </el-col>
-      </el-row>
+      <Input
+        title="产品价格"
+        placeholder="请输入产品价格"
+        type="number"
+        :autosize="{ minRows: 4 }"
+        @change="
+          (item) => {
+            this.price = item;
+          }
+        "
+      />
+
       <Upload
         name="image"
         title="广告展示图"
@@ -84,12 +86,9 @@ export default Vue.extend({
     };
   },
   methods: {
-    priceChangeFun() {
-      if (this.price && this.price > 0) {
-        this.priceIcon = "el-icon-success";
-      } else {
-        this.priceIcon = "el-icon-error";
-      }
+    onUpLoad() {},
+    onReset() {
+      this.title = "";
     },
   },
 });

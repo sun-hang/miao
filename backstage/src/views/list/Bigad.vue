@@ -12,11 +12,13 @@
         prop="title"
         label="广告标题"
         header-row-class-name="thstyle"
+        
       >
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.title">
           <TableTdComponent
             type="text"
             :text="scope.row.title"
+            :key="scope.row.title"
             @change="
               (item) => {
                 scope.row.title = item;
@@ -32,6 +34,7 @@
       >
         <template slot-scope="scope">
           <TableTdComponent
+          :key="scope.row.id"
             type="text"
             :text="scope.row.synopsis"
             @change="
@@ -49,6 +52,7 @@
       >
         <template slot-scope="scope">
           <TableTdComponent
+          :key="scope.row.id"
             type="text"
             :text="scope.row.content"
             @change="
@@ -84,7 +88,7 @@
           <el-button
             type="primary"
             size="mini"
-            style="margin:0 10px 0 0"
+            style="margin: 0 10px 0 0"
             @click="updata(scope.row)"
             >修改</el-button
           >
@@ -94,7 +98,7 @@
     </el-table>
     <el-pagination
       background
-      style="margin:20px auto"
+      style="margin: 20px auto"
       :page-size="5"
       layout="prev, pager, next"
       :total="data.length"
@@ -125,7 +129,6 @@ export default Vue.extend({
         return data;
       }
       data = this.data.slice((this.page - 1) * 5, this.page * 5);
-      console.log((this.page - 1) * 5,this.page * 5);
       return data;
     },
   },
@@ -133,16 +136,14 @@ export default Vue.extend({
     currentPageChange(page: number) {
       this.page = page;
     },
-    render() {
-      //   this.$router.go(0)
-    },
-
     yesDel(item: any) {
       let newData = this.data.filter((it: any) => {
         return it.id !== item.id;
       });
       this.data = newData;
-      console.log(newData);
+      if(this.data.length <= 5){
+        this.page = 1;
+      }
       upload(
         "/api/bigad/" + item.id,
         {
@@ -150,7 +151,6 @@ export default Vue.extend({
           method: "delete",
         },
         () => {
-          this.render();
         },
         this
       );

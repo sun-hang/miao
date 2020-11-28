@@ -38,7 +38,7 @@ const routes: Array<RouteConfig> = [
     // 首页大广告
     path: '/list/bigad',
     name: 'ListBigad',
-    component: () => import('../views/list/Bigad.vue')
+    component: () => import('../views/list/Bigad.vue'),
   },
   {
     // 首页大图
