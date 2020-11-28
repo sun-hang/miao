@@ -59,6 +59,7 @@ router.post('/', async (req, res, next) => {
  * 修改
  */
 router.put('/:id', async (req, res, next) => {
+    console.log(req.body,req.params.id)
     await putHandler(req, res, next, upData);
 })
 

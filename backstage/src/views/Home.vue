@@ -2,20 +2,29 @@
   <div>
     <!-- 首页主页 -->
     <h1>这是首页</h1>
-    <upload-component
-      action="/api/updata/images"
-      name="image"
-      :autoUpload="true"
-    ></upload-component>
+    <TableTdImg :src="'/api/download/img/' + srcs[0]" @change="change" />
   </div>
 </template>
 
 <script lang="ts">
-import UploadComponent from "../components/content/UploadComponent.vue";
+import TableTdImg from "../components/list/ImgBigShow.vue";
 import Vue from "vue";
 export default Vue.extend({
+  data() {
+    return {
+      srcs: ["1160649048748478.jpg"],
+    };
+  },
+  methods: {
+    change(item: string) {
+      this.srcs = this.srcs.filter((it) => {
+        it = "/api/download/img/" + it;
+        return it !== item;
+      });
+    },
+  },
   components: {
-    UploadComponent,
+    TableTdImg,
   },
 });
 </script>
