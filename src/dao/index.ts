@@ -1,6 +1,6 @@
 // 主文件
 import {Sequelize} from 'sequelize';
-let pass = "980529Ssf.";
+let pass = "root";
 module.exports = new Sequelize('miao',"root",pass,{
     host:"127.0.0.1",
     port:3306,
