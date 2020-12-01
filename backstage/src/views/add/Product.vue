@@ -7,6 +7,8 @@
         title="产品标题"
         placeholder="请输入产品标题"
         type="text"
+        :value="productName"
+        :key="productName+'productName'"
         @change="
           (item) => {
             this.productName = item;
@@ -18,6 +20,8 @@
         title="产品原价"
         placeholder="请输入产品原价"
         type="number"
+        :value="originalPrice"
+        :key="originalPrice+'originalPrice'"
         @change="
           (item) => {
             this.originalPrice = item;
@@ -29,6 +33,8 @@
         title="产品现价"
         placeholder="请输入产品现价"
         type="number"
+        :value="nowPrice"
+        :key="nowPrice+'nowPrice'"
         @change="
           (item) => {
             this.nowPrice = item;
@@ -41,6 +47,8 @@
         placeholder="请输入产品简介"
         type="textarea"
         :autosize="{ minRows: 3 }"
+        :value="synopsis"
+        :key="synopsis+'synopsis'"
         @change="
           (item) => {
             this.synopsis = item;
@@ -53,6 +61,8 @@
         placeholder="请输入产品详情，没有就不需要传"
         type="textarea"
         :autosize="{ minRows: 3 }"
+        :value="detail"
+        :key="detail+'detail'"
         @change="
           (item) => {
             this.detail = item;
@@ -284,7 +294,7 @@ export default Vue.extend({
         this.listImgSrc.unshift(this.videoSrc as never);
       }
 
-      fetch("/api/product", {
+      upload("/api/product",{
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -301,10 +311,8 @@ export default Vue.extend({
           tag: this.tags.toString(),
         }),
         credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          this.$store.commit("getProductId", res.data);
+      },(res:any)=>{
+        this.$store.commit("getProductId", res.data);
           let listImgSrc: any = this.$refs.listImgSrc;
           let synopsisList: any = this.$refs.synopsisList;
           let upload: any = this.$refs.upload;
@@ -319,7 +327,7 @@ export default Vue.extend({
           this.originalPrice = null;
           this.synopsis = "";
           this.detail = "";
-        });
+      },this);
     },
     // 添加产品数据按钮
     addProdcutDataClick() {},

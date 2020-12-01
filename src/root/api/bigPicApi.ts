@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { getResObj, getHandler, putHandler, delHandler, delMoreHandler, getIdHandler, postHandler } from '../util';
 import { bigPicDAOType } from '../../dao/bigPicDAO';
 import { addMore, addOne, removeMore, removeOne, update, findAll, findById, findByNewOne } from '../../services/bigPicSer';
-import { updata } from '../../services/userAdminSer';
 const router: Router = Router();
 
 /**
@@ -52,7 +51,7 @@ router.post('/', async (req, res, next) => {
  * 修改指定数据
  */
 router.put('/:id', async (req, res, next) => {
-    await putHandler(req, res, next, updata);
+    await putHandler(req, res, next, update);
 })
 
 /**

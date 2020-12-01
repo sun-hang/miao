@@ -6,6 +6,8 @@
         title="广告标题"
         placeholder="请输入广告标题"
         type="text"
+        :value="title"
+        :key="title + 'title'"
         @change="
           (item) => {
             this.title = item;
@@ -16,6 +18,8 @@
         title="广告简介"
         placeholder="请输入广告简介"
         type="textarea"
+        :value="synopsis"
+        :key="synopsis + 'synopsis'"
         :autosize="{ minRows: 2 }"
         @change="
           (item) => {
@@ -27,6 +31,8 @@
         title="广告内容"
         placeholder="请输入广告内容"
         type="textarea"
+        :value="content"
+        :key="content + 'content'"
         :autosize="{ minRows: 4 }"
         @change="
           (item) => {

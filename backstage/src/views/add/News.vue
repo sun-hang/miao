@@ -6,6 +6,8 @@
         title="新闻标题"
         placeholder="请输入新闻标题"
         type="text"
+        :value="title"
+        :key="title + 'title'"
         @change="
           (item) => {
             this.title = item;
@@ -17,6 +19,8 @@
         placeholder="请输入新闻简介"
         type="textarea"
         :autosize="{ minRows: 2 }"
+        :value="synopsis"
+        :key="synopsis + 'synopsis'"
         @change="
           (item) => {
             this.synopsis = item;
@@ -27,6 +31,8 @@
         title="新闻内容"
         placeholder="请输入新闻内容"
         type="textarea"
+        :value="content"
+        :key="content + 'content'"
         :autosize="{ minRows: 4 }"
         @change="
           (item) => {
@@ -98,6 +104,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { upload } from "../utli";
 import Input from "../../components/content/Input.vue";
 export default Vue.extend({
   data() {
@@ -169,41 +176,28 @@ export default Vue.extend({
         ctime: Date.now() + "",
       };
       let self = this;
-      fetch("/api/news", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.data) {
-            this.$notify({
-              title: "添加成功",
-              type: "success",
-              message: "成功添加一条数据",
-              onClose() {
-                let upload: any = self.$refs.upload;
-                upload.clearFiles();
 
-                self.title = "";
-                self.content = "";
-                self.synopsis = "";
-                self.imgsrc = "";
-                self.tags = [];
-                console.log(self);
-              },
-            });
-          } else {
-            this.$notify({
-              title: "添加失败",
-              type: "error",
-              message: res.data,
-            });
-          }
-        });
+      upload(
+        "/api/news",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        },
+        () => {
+          let upload: any = self.$refs.upload;
+          upload.clearFiles();
+          self.title = "";
+          self.content = "";
+          self.synopsis = "";
+          self.imgsrc = "";
+          self.tags = [];
+        },
+        this
+      );
     },
     onReset() {
       this.title = "";
@@ -225,7 +219,7 @@ export default Vue.extend({
 </script>
 
 <style>
-.news-box{
+.news-box {
   margin-bottom: 40px;
 }
 .news-box h1 {
@@ -266,5 +260,4 @@ export default Vue.extend({
   margin-left: 10px;
   vertical-align: bottom;
 }
-
 </style>

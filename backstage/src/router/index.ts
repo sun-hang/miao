@@ -96,7 +96,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/list/useradmin',
     name: 'ListUserAdmin',
-    component: () => import('../views/list/ShoppingCart.vue')
+    component: () => import('../views/list/UserAdmin.vue')
   },
   {
     path: '*',

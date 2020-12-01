@@ -3,6 +3,7 @@
 /**
  * 导入用户操作对象和数据类型接口
  */
+import { UserAddressDAO } from '../dao/userAddressDAO';
 import { UserAdminDAO, userAdminDAOType } from '../dao/userAdminDAO';
 
 // 增
@@ -60,6 +61,7 @@ export const updata = async (id: number, data = {}) => {
             id
         }
     })
+    console.log(result)
     return result;
 }
 // 查
@@ -80,7 +82,9 @@ export const findOne = async (id: number): Promise<userAdminDAOType | null> => {
  * 查询所有
  */
 export const findAll = async (): Promise<userAdminDAOType[]> => {
-    const result = await UserAdminDAO.findAll();
+    const result = await UserAdminDAO.findAll({
+        include: [UserAddressDAO]
+    });
     return JSON.parse(JSON.stringify(result));
 }
 

@@ -7,7 +7,7 @@
         placeholder="请输入广告主标题"
         type="text"
         :value="title"
-        :key="title"
+        :key="title + 'title'"
         @change="
           (item) => {
             this.title = item;
@@ -18,9 +18,11 @@
         title="广告辅标题"
         placeholder="请输入广告辅标题"
         type="text"
+        :value="mintitle"
+        :key="mintitle + 'mintitle'"
         @change="
           (item) => {
-            this.synopsis = item;
+            this.mintitle = item;
           }
         "
       />
@@ -29,6 +31,8 @@
         placeholder="请输入广告内容"
         type="textarea"
         :autosize="{ minRows: 4 }"
+        :value="content"
+        :key="content + 'content'"
         @change="
           (item) => {
             this.content = item;
@@ -39,6 +43,8 @@
         title="产品价格"
         placeholder="请输入产品价格"
         type="number"
+        :value="price"
+        :key="price + 'price'"
         :autosize="{ minRows: 4 }"
         @change="
           (item) => {
@@ -50,6 +56,7 @@
       <Upload
         name="image"
         title="广告展示图"
+        ref="upload"
         @change="
           (item) => {
             this.imgsrc = item;
@@ -68,6 +75,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { errorAlert, upload } from "../utli";
 import Upload from "../../components/content/UploadImage.vue";
 import Input from "../../components/content/Input.vue";
 export default Vue.extend({
@@ -82,13 +90,71 @@ export default Vue.extend({
       content: "",
       price: 0,
       imgsrc: "",
-      priceIcon: "",
     };
   },
   methods: {
-    onUpLoad() {},
+    onUpLoad() {
+      if (!this.title) {
+        errorAlert("验证错误", "广告标题为空", this);
+        return;
+      }
+
+      if (!this.mintitle) {
+        errorAlert("验证错误", "广告二号标题为空", this);
+        return;
+      }
+
+      if (!this.price) {
+        errorAlert("验证错误", "产品价格为空", this);
+        return;
+      }
+
+      if (!this.content) {
+        errorAlert("验证错误", "广告内容为空", this);
+        return;
+      }
+
+      if (!this.imgsrc) {
+        errorAlert("验证错误", "广告图片地址为空", this);
+        return;
+      }
+      console.log({
+        title: this.title,
+        content: this.content,
+        imgsrc: this.imgsrc,
+        price: this.price,
+        mintitle: this.mintitle,
+      });
+      upload(
+        "/api/smallad",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            title: this.title,
+            content: this.content,
+            imgsrc: this.imgsrc,
+            price: this.price,
+            mintitle: this.mintitle,
+          }),
+        },
+        (res: any) => {
+          this.onReset();
+        },
+        this
+      );
+    },
     onReset() {
       this.title = "";
+      this.mintitle = "";
+      this.content = "";
+      this.price = 0;
+      this.imgsrc = "";
+      let upload: any = this.$refs.upload;
+      upload.closeImgList();
     },
   },
 });

@@ -1,5 +1,6 @@
 <template>
   <div class="bigadlist-box" v-if="tableData">
+    <SearchInputComponent @click="searchClick"></SearchInputComponent>
     <el-table
       style="width: 100%"
       ref="bigadTable"
@@ -12,7 +13,6 @@
         prop="title"
         label="广告标题"
         header-row-class-name="thstyle"
-        
       >
         <template slot-scope="scope" v-if="scope.row.title">
           <TableTdComponent
@@ -34,7 +34,7 @@
       >
         <template slot-scope="scope">
           <TableTdComponent
-          :key="scope.row.id"
+            :key="scope.row.id"
             type="text"
             :text="scope.row.synopsis"
             @change="
@@ -52,7 +52,7 @@
       >
         <template slot-scope="scope">
           <TableTdComponent
-          :key="scope.row.id"
+            :key="scope.row.id"
             type="text"
             :text="scope.row.content"
             @change="
@@ -64,7 +64,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="content"
+        prop="imgsrc"
         label="广告大图"
         header-row-class-name="thstyle"
       >
@@ -101,7 +101,7 @@
       style="margin: 20px auto"
       :page-size="5"
       layout="prev, pager, next"
-      :total="data.length"
+      :total="searchData.length"
       @current-change="currentPageChange"
     >
     </el-pagination>
@@ -110,6 +110,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import SearchInputComponent from "../../components/list/SearchInputComponent.vue";
 import DelButtonComponent from "../../components/list/DelButtonComponent.vue";
 import TableTdFileUploadComponent from "../../components/list/TableTdFileUploadComponent.vue";
 import TableTdComponent from "../../components/list/TableTdComponent.vue";
@@ -119,16 +120,25 @@ export default Vue.extend({
     return {
       data: [],
       page: 1,
+      searchData: [],
+      searchStr: "",
     };
   },
   computed: {
     tableData() {
       let data: never[] = [];
-      if (this.data.length < 5) {
-        data = this.data;
+      if (this.searchStr) {
+        this.searchData = this.data.filter((item: any) => {
+          return item.title.includes(this.searchStr);
+        });
+      }else{
+        this.searchData = this.data;
+      }
+      if (this.searchData.length < 5) {
+        data = this.searchData;
         return data;
       }
-      data = this.data.slice((this.page - 1) * 5, this.page * 5);
+      data = this.searchData.slice((this.page - 1) * 5, this.page * 5);
       return data;
     },
   },
@@ -140,9 +150,10 @@ export default Vue.extend({
       let newData = this.data.filter((it: any) => {
         return it.id !== item.id;
       });
-      this.data = newData;
-      if(this.data.length <= 5){
-        this.page = 1;
+      this.searchData = newData;
+      let total = Math.ceil(this.searchData.length / 5);
+      if (this.page > total) {
+        this.page = total;
       }
       upload(
         "/api/bigad/" + item.id,
@@ -150,8 +161,7 @@ export default Vue.extend({
           credentials: "include",
           method: "delete",
         },
-        () => {
-        },
+        () => {},
         this
       );
     },
@@ -175,6 +185,9 @@ export default Vue.extend({
         this
       );
     },
+    searchClick(option: string) {
+      this.searchStr = option;
+    },
   },
   mounted() {
     fetch("/api/bigad", {
@@ -189,6 +202,7 @@ export default Vue.extend({
     TableTdComponent,
     TableTdFileUploadComponent,
     DelButtonComponent,
+    SearchInputComponent,
   },
 });
 </script>

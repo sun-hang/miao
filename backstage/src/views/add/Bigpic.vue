@@ -22,24 +22,23 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { upload } from "../utli";
 export default Vue.extend({
   methods: {
     async uploadImage(response: any, file: any, fileList: any) {
-      let result = await fetch("/api/bigpic", {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      upload(
+        "/api/bigpic",
+        {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({ imgsrc: response.data.srcList[0] }),
         },
-        method: "POST",
-        body: JSON.stringify({ imgsrc: response.data.srcList[0] }),
-      }).then((res) => res.json());
-      if (result.data) {
-        this.$notify({
-          title: "添加成功",
-          type: "success",
-          message: "成功添加一张首页大图",
-        });
-      }
+        () => {},
+        this
+      );
     },
   },
 });

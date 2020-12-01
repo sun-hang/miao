@@ -15,7 +15,7 @@ export const upload = async (path: string, option: any, cd: Function, self: any)
             type: "success",
             message: res.msg,
             onClose() {
-                cd()
+                cd(res)
             },
         });
     } else {
