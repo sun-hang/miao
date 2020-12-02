@@ -1,5 +1,5 @@
 <template>
-  <div class="bigadlist-box" v-if="tableData">
+  <div class="bigadlist-box">
     <SearchInputComponent @click="searchClick"></SearchInputComponent>
     <el-table
       style="width: 100%"
@@ -9,71 +9,36 @@
       show-header
       v-if="tableData"
     >
-      <el-table-column
-        prop="title"
-        label="广告标题"
-        header-row-class-name="thstyle"
-      >
-        <template slot-scope="scope" v-if="scope.row.title">
-          <TableTdComponent
-            type="text"
-            :text="scope.row.title"
-            :key="scope.row.title"
-            @change="
-              (item) => {
-                scope.row.title = item;
-              }
-            "
-          ></TableTdComponent>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="synopsis"
-        label="广告简介"
-        header-row-class-name="thstyle"
-      >
+      <el-table-column label="用户名" header-row-class-name="thstyle">
         <template slot-scope="scope">
-          <TableTdComponent
-            :key="scope.row.id"
-            type="text"
-            :text="scope.row.synopsis"
-            @change="
-              (item) => {
-                scope.row.synopsis = item;
-              }
-            "
-          ></TableTdComponent>
+          <span>{{ scope.row.useradmin.loginUser }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="content"
-        label="广告内容"
+        label="评论内容"
         header-row-class-name="thstyle"
       >
         <template slot-scope="scope">
-          <TableTdComponent
-            :key="scope.row.id"
-            type="text"
-            :text="scope.row.content"
-            @change="
-              (item) => {
-                scope.row.content = item;
-              }
-            "
-          ></TableTdComponent>
+          <span>{{ scope.row.content }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="产品名称" header-row-class-name="thstyle">
+        <template slot-scope="scope">
+          <span>{{ scope.row.product.productName }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="imgsrc"
-        label="广告大图"
+        prop="imgs"
+        label="评论图片"
         header-row-class-name="thstyle"
       >
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.imgs">
           <table-td-file-upload-component
-            :text="scope.row.imgsrc"
+            :text="scope.row.imgs"
             @change="
               (item) => {
-                scope.row.imgsrc = item;
+                scope.row.imgs = item;
               }
             "
           ></table-td-file-upload-component>
@@ -90,8 +55,20 @@
             size="mini"
             style="margin: 0 10px 0 0"
             @click="updata(scope.row)"
-            >修改</el-button
+            >回复</el-button
           >
+          <el-dialog title="回复" :visible.sync="dialogFormVisible">
+            <el-row>
+              <el-col :span="4">回复内容：</el-col>
+              <el-col :span="20"><el-input v-model="inpStr" type="textarea" :autosize="{ minRows: 4 }"></el-input></el-col>
+            </el-row>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false"
+                >确 定</el-button
+              >
+            </div>
+          </el-dialog>
           <DelButtonComponent :item="scope.row" @change="yesDel" />
         </template>
       </el-table-column>
@@ -105,6 +82,7 @@
       @current-change="currentPageChange"
     >
     </el-pagination>
+    {{searchData}}
   </div>
 </template>
 
@@ -132,6 +110,8 @@ export default Vue.extend({
       page: 1,
       searchData: [],
       searchStr: "",
+      dialogFormVisible:false,
+      inpStr:""
     };
   },
   computed: {

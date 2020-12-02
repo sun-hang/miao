@@ -85,7 +85,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/list/comment',
     name: 'ListComment',
-    component: () => import('../views/list/Comment.vue')
+    component: () => import('../views/list/comment.vue')
   },
   {
     path: '/list/shoppingcart',
