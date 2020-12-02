@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { commentDAOType } from '../../dao/commentDAO';
 import { delHandler, delMoreHandler, getIdHandler, getResObj, postHandler, putHandler } from '../util';
-import { addMore, addOne, removeMore, removeOne, updata, findAll, findByPage, findDESC, findOne,findAllList } from '../../services/commentSer';
+import { addMore, addOne, removeMore, removeOne, updata, findAll, findByPage, findDESC, findOne, findAllList } from '../../services/commentSer';
 const router: Router = Router();
 
 /**
@@ -11,27 +11,24 @@ const router: Router = Router();
  */
 router.get('/', async (req, res, next) => {
     let productId: number = req.query.productId ? parseInt(req.query.productId as string) : 0;
-    if (Object.is(productId, NaN) && productId > 0) {
-        let desc = req.query.desc ? parseInt(req.query.desc as string) : 0;
-        let page = req.query.page ? parseInt(req.query.page as string) : 0;
-        let size = req.query.size ? parseInt(req.query.size as string) : 10;
-        let result;
-        // 倒叙获取
-        if (desc == 1) {
-            result = await findDESC(productId);
-        } else if (page > 0) {
-            // 分页获取
-            result = await findByPage(productId, page, size);
-        } else if(productId > 0){
-            // 获取所有
-            result = await findAll(productId);
-        }else{
-            result = await findAllList();
-        }
-        res.json(getResObj(200, "请求成功", result));
+
+    let desc = req.query.desc ? parseInt(req.query.desc as string) : 0;
+    let page = req.query.page ? parseInt(req.query.page as string) : 0;
+    let size = req.query.size ? parseInt(req.query.size as string) : 10;
+    let result;
+    // 倒叙获取
+    if (desc == 1) {
+        result = await findDESC(productId);
+    } else if (page > 0) {
+        // 分页获取
+        result = await findByPage(productId, page, size);
+    } else if (Object.is(productId, NaN) && productId > 0) {
+        // 获取所有
+        result = await findAll(productId);
     } else {
-        res.json(getResObj(200, "产品id错误", null))
+        result = await findAllList();
     }
+    res.json(getResObj(200, "请求成功", result));
     // productid 使用query
     // findAll  findByPage  findDesc
 });
