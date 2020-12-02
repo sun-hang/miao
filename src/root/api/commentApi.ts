@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { commentDAOType } from '../../dao/commentDAO';
 import { delHandler, delMoreHandler, getIdHandler, getResObj, postHandler, putHandler } from '../util';
-import { addMore, addOne, removeMore, removeOne, updata, findAll, findByPage, findDESC, findOne } from '../../services/commentSer';
+import { addMore, addOne, removeMore, removeOne, updata, findAll, findByPage, findDESC, findOne,findAllList } from '../../services/commentSer';
 const router: Router = Router();
 
 /**
@@ -22,9 +22,11 @@ router.get('/', async (req, res, next) => {
         } else if (page > 0) {
             // 分页获取
             result = await findByPage(productId, page, size);
-        } else {
+        } else if(productId > 0){
             // 获取所有
             result = await findAll(productId);
+        }else{
+            result = await findAllList();
         }
         res.json(getResObj(200, "请求成功", result));
     } else {

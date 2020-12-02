@@ -7,7 +7,7 @@ export interface commentDAOType {
     content: string
     imgs: string
     productid?: number | null
-    ctime: number
+    ctime: string
     id?: number
     deletedAt: string | null
 }
@@ -43,7 +43,7 @@ export const CommentDAO: ModelCtor<Model> = sequelize.define('comment', {
     },
     // 创建时间
     ctime: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     }
 

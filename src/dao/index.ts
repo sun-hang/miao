@@ -8,5 +8,6 @@ module.exports = new Sequelize('miao',"root",pass,{
     logging:(msg)=>{
         // console.log(msg)
     }
+    
 });
 

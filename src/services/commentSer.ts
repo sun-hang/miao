@@ -89,6 +89,16 @@ export const findAll = async (productid: number): Promise<commentDAOType[]> => {
     });
     return JSON.parse(JSON.stringify(result));
 }
+
+/**
+ * 查询所有 需要产品id
+ */
+export const findAllList = async (): Promise<commentDAOType[]> => {
+    const result = await CommentDAO.findAll({
+        include: [ProductDAO, UserAdminDAO]
+    });
+    return JSON.parse(JSON.stringify(result));
+}
 /**
  * 根据id倒叙查询
  */

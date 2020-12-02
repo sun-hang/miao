@@ -117,11 +117,12 @@ import TableTdComponent from "../../components/list/TableTdComponent.vue";
 import { upload } from "../utli";
 export default Vue.extend({
   mounted() {
-    fetch("/api/bigad", {
+    fetch("/api/comment", {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((res) => {
+          console.log(res);
         this.data = res.data;
       });
   },
@@ -132,6 +133,24 @@ export default Vue.extend({
       searchData: [],
       searchStr: "",
     };
+  },
+  computed: {
+    tableData() {
+      let data: never[] = [];
+      if (this.searchStr) {
+        this.searchData = this.data.filter((item: any) => {
+          return item.title.includes(this.searchStr);
+        });
+      } else {
+        this.searchData = this.data;
+      }
+      if (this.searchData.length < 5) {
+        data = this.searchData;
+        return data;
+      }
+      data = this.searchData.slice((this.page - 1) * 5, this.page * 5);
+      return data;
+    },
   },
   methods: {
     currentPageChange(page: number) {
@@ -147,7 +166,7 @@ export default Vue.extend({
         this.page = total;
       }
       upload(
-        "/api/bigad/" + item.id,
+        "/api/comment/" + item.id,
         {
           credentials: "include",
           method: "delete",
@@ -163,7 +182,7 @@ export default Vue.extend({
       delete data.id;
       delete data.deletedAt;
       upload(
-        "/api/bigad/" + +item.id,
+        "/api/comment/" + +item.id,
         {
           credentials: "include",
           body: JSON.stringify(data),
@@ -179,6 +198,12 @@ export default Vue.extend({
     searchClick(option: string) {
       this.searchStr = option;
     },
+  },
+  components: {
+    TableTdComponent,
+    TableTdFileUploadComponent,
+    DelButtonComponent,
+    SearchInputComponent,
   },
 });
 </script>
