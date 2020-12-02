@@ -9,71 +9,36 @@
       show-header
       v-if="tableData"
     >
-      <el-table-column
-        prop="title"
-        label="广告标题"
-        header-row-class-name="thstyle"
-      >
-        <template slot-scope="scope" v-if="scope.row.title">
-          <TableTdComponent
-            type="text"
-            :text="scope.row.title"
-            :key="scope.row.title"
-            @change="
-              (item) => {
-                scope.row.title = item;
-              }
-            "
-          ></TableTdComponent>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="synopsis"
-        label="广告简介"
-        header-row-class-name="thstyle"
-      >
+      <el-table-column label="用户名" header-row-class-name="thstyle">
         <template slot-scope="scope">
-          <TableTdComponent
-            :key="scope.row.id"
-            type="text"
-            :text="scope.row.synopsis"
-            @change="
-              (item) => {
-                scope.row.synopsis = item;
-              }
-            "
-          ></TableTdComponent>
+          <span>{{ scope.row.useradmin.loginUser }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="content"
-        label="广告内容"
+        label="评论内容"
         header-row-class-name="thstyle"
       >
         <template slot-scope="scope">
-          <TableTdComponent
-            :key="scope.row.id"
-            type="text"
-            :text="scope.row.content"
-            @change="
-              (item) => {
-                scope.row.content = item;
-              }
-            "
-          ></TableTdComponent>
+          <span>{{ scope.row.content }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="产品名称" header-row-class-name="thstyle">
+        <template slot-scope="scope">
+          <span>{{ scope.row.product.productName }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="imgsrc"
-        label="广告大图"
+        prop="imgs"
+        label="评论图片"
         header-row-class-name="thstyle"
       >
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.imgs">
           <table-td-file-upload-component
-            :text="scope.row.imgsrc"
+            :text="scope.row.imgs"
             @change="
               (item) => {
-                scope.row.imgsrc = item;
+                scope.row.imgs = item;
               }
             "
           ></table-td-file-upload-component>
@@ -90,8 +55,27 @@
             size="mini"
             style="margin: 0 10px 0 0"
             @click="updata(scope.row)"
-            >修改</el-button
+            >回复</el-button
           >
+          <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+              <el-form-item label="活动名称" :label-width="formLabelWidth">
+                <el-input v-model="form.name" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="活动区域" :label-width="formLabelWidth">
+                <el-select v-model="form.region" placeholder="请选择活动区域">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false"
+                >确 定</el-button
+              >
+            </div>
+          </el-dialog>
           <DelButtonComponent :item="scope.row" @change="yesDel" />
         </template>
       </el-table-column>
