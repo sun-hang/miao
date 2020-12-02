@@ -1,5 +1,5 @@
 <template>
-  <div class="bigadlist-box" v-if="tableData">
+  <div class="bigadlist-box">
     <SearchInputComponent @click="searchClick"></SearchInputComponent>
     <el-table
       style="width: 100%"
@@ -57,18 +57,11 @@
             @click="updata(scope.row)"
             >回复</el-button
           >
-          <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-              <el-form-item label="活动名称" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="活动区域" :label-width="formLabelWidth">
-                <el-select v-model="form.region" placeholder="请选择活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
+          <el-dialog title="回复" :visible.sync="dialogFormVisible">
+            <el-row>
+              <el-col :span="4">回复内容：</el-col>
+              <el-col :span="20"><el-input v-model="inpStr" type="textarea" :autosize="{ minRows: 4 }"></el-input></el-col>
+            </el-row>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
               <el-button type="primary" @click="dialogFormVisible = false"
@@ -89,6 +82,7 @@
       @current-change="currentPageChange"
     >
     </el-pagination>
+    {{searchData}}
   </div>
 </template>
 
@@ -115,6 +109,8 @@ export default Vue.extend({
       page: 1,
       searchData: [],
       searchStr: "",
+      dialogFormVisible:false,
+      inpStr:""
     };
   },
   methods: {
