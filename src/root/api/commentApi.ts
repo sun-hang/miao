@@ -45,17 +45,13 @@ function verify(item: commentDAOType, keys: string[]) {
     if (!item.ctime) {
         return "属性 ctime 不存在"
     }
-    if (!item.imgs) {
-        return "属性 imgs 不存在"
-    }
-    if (!item.productid) {
-        return "属性 productid 不存在"
-    }
+    
     if (!item.username) {
         return "属性 username 不存在"
     }
-    if (!item.userid) {
-        return "属性 userid 不存在"
+
+    if (!item.ctime) {
+        return "属性 ctime 不存在"
     }
     return false;
 }

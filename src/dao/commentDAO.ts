@@ -29,8 +29,7 @@ export const CommentDAO: ModelCtor<Model> = sequelize.define('comment', {
     },
     // 评论图片，多个
     imgs: {
-        type: DataTypes.TEXT,
-        allowNull: false
+        type: DataTypes.TEXT
     },
     // 产品id
     // productid: {

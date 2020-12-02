@@ -11,7 +11,7 @@
     >
       <el-table-column label="用户名" header-row-class-name="thstyle">
         <template slot-scope="scope">
-          <span>{{ scope.row.useradmin.loginUser }}</span>
+          <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -36,12 +36,14 @@
         <template slot-scope="scope" v-if="scope.row.imgs">
           <table-td-file-upload-component
             :text="scope.row.imgs"
+            v-if="scope.row.imgs"
             @change="
               (item) => {
                 scope.row.imgs = item;
               }
             "
           ></table-td-file-upload-component>
+          <span v-if="!scope.row.imgs">没有图片</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,11 +62,17 @@
           <el-dialog title="回复" :visible.sync="dialogFormVisible">
             <el-row>
               <el-col :span="4">回复内容：</el-col>
-              <el-col :span="20"><el-input v-model="inpStr" type="textarea" :autosize="{ minRows: 4 }"></el-input></el-col>
+              <el-col :span="20"
+                ><el-input
+                  v-model="inpStr"
+                  type="textarea"
+                  :autosize="{ minRows: 4 }"
+                ></el-input
+              ></el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogFormVisible = false"
+              <el-button type="primary" @click="addComment(scope.row)"
                 >确 定</el-button
               >
             </div>
@@ -82,7 +90,6 @@
       @current-change="currentPageChange"
     >
     </el-pagination>
-    {{searchData}}
   </div>
 </template>
 
@@ -100,7 +107,6 @@ export default Vue.extend({
     })
       .then((res) => res.json())
       .then((res) => {
-          console.log(res);
         this.data = res.data;
       });
   },
@@ -110,8 +116,8 @@ export default Vue.extend({
       page: 1,
       searchData: [],
       searchStr: "",
-      dialogFormVisible:false,
-      inpStr:""
+      dialogFormVisible: false,
+      inpStr: "",
     };
   },
   computed: {
@@ -140,8 +146,8 @@ export default Vue.extend({
       let newData = this.data.filter((it: any) => {
         return it.id !== item.id;
       });
-      this.searchData = newData;
-      let total = Math.ceil(this.searchData.length / 5);
+      this.data = newData;
+      let total = Math.ceil(this.data.length / 5);
       if (this.page > total) {
         this.page = total;
       }
@@ -151,30 +157,58 @@ export default Vue.extend({
           credentials: "include",
           method: "delete",
         },
-        () => {},
+        () => {
+        },
         this
       );
     },
     updata(item: any) {
+      // let data = {
+      //   ...item,
+      // };
+      // delete data.id;
+      // delete data.deletedAt;
+      // upload(
+      //   "/api/comment/" + +item.id,
+      //   {
+      //     credentials: "include",
+      //     body: JSON.stringify(data),
+      //     method: "put",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   },
+      //   () => {},
+      //   this
+      // );
+      this.dialogFormVisible = true;
+    },
+    addComment(item: any) {
       let data = {
-        ...item,
-      };
-      delete data.id;
-      delete data.deletedAt;
+        username:"商家",
+        content:this.inpStr,
+        parentid:item.id,
+        ctime:Date.now()+"",
+        productId:item.productId
+      }
+      this.dialogFormVisible = false;
       upload(
-        "/api/comment/" + +item.id,
+        "/api/comment/",
         {
           credentials: "include",
-          body: JSON.stringify(data),
-          method: "put",
-          headers: {
-            "Content-Type": "application/json",
+          method: "post",
+          headers:{
+            "Content-Type":"application/json"
           },
+          body:JSON.stringify(data)
         },
-        () => {},
+        () => {
+          this.$router.go(0)
+        },
         this
       );
     },
+
     searchClick(option: string) {
       this.searchStr = option;
     },

@@ -151,7 +151,7 @@ export default Vue.extend({
         return it.id !== item.id;
       });
       this.data = newData;
-      if (this.searchData.length <= 5) {
+      if (this.data.length <= 5) {
         this.page = 1;
       }
       upload(

@@ -185,8 +185,8 @@ export default Vue.extend({
       let newData = this.data.filter((it: any) => {
         return it.id !== item.id;
       });
-      this.searchData = newData;
-      let total = Math.ceil(this.searchData.length / 5);
+      this.data = newData;
+      let total = Math.ceil(this.data.length / 5);
       if (this.page > total) {
         this.page = total;
       }

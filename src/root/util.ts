@@ -121,7 +121,6 @@ export const postHandler = async <T>(req: Request, res: Response, next: NextFunc
 
     // 添加一个
     let flag = verify(data, keys);
-    console.log(flag);
     if (!flag) {
         let result = await handle(data);
         res.json(getResObj(200, "添加成功", result));
