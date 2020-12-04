@@ -28,6 +28,11 @@
           <span>{{ scope.row.product.productName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="回复目标" header-row-class-name="thstyle">
+        <template slot-scope="scope">
+          <ParentIdComponent :parentid="scope.row.parentid"/>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="imgs"
         label="评论图片"
@@ -95,6 +100,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import ParentIdComponent from "../../components/list/commentComp/ParentIdComponent.vue";
 import SearchInputComponent from "../../components/list/SearchInputComponent.vue";
 import DelButtonComponent from "../../components/list/DelButtonComponent.vue";
 import TableTdFileUploadComponent from "../../components/list/TableTdFileUploadComponent.vue";
@@ -125,7 +131,7 @@ export default Vue.extend({
       let data: never[] = [];
       if (this.searchStr) {
         this.searchData = this.data.filter((item: any) => {
-          return item.title.includes(this.searchStr);
+          return item.username.includes(this.searchStr) || item.content.includes(this.searchStr);
         });
       } else {
         this.searchData = this.data;
@@ -157,8 +163,7 @@ export default Vue.extend({
           credentials: "include",
           method: "delete",
         },
-        () => {
-        },
+        () => {},
         this
       );
     },
@@ -185,25 +190,25 @@ export default Vue.extend({
     },
     addComment(item: any) {
       let data = {
-        username:"商家",
-        content:this.inpStr,
-        parentid:item.id,
-        ctime:Date.now()+"",
-        productId:item.productId
-      }
+        username: "商家",
+        content: this.inpStr,
+        parentid: item.id,
+        ctime: Date.now() + "",
+        productId: item.productId,
+      };
       this.dialogFormVisible = false;
       upload(
         "/api/comment/",
         {
           credentials: "include",
           method: "post",
-          headers:{
-            "Content-Type":"application/json"
+          headers: {
+            "Content-Type": "application/json",
           },
-          body:JSON.stringify(data)
+          body: JSON.stringify(data),
         },
         () => {
-          this.$router.go(0)
+          this.$router.go(0);
         },
         this
       );
@@ -218,6 +223,7 @@ export default Vue.extend({
     TableTdFileUploadComponent,
     DelButtonComponent,
     SearchInputComponent,
+    ParentIdComponent,
   },
 });
 </script>

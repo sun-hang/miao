@@ -1,7 +1,11 @@
 import React from 'react'
 import { useHistory } from 'umi';
-let whiteList = ['/news', '/productdetails'];
-
+import { Layout } from 'antd';
+const { Header, Footer, Sider, Content } = Layout;
+import MyHeader from '../components/header/index';
+import MyFooter from '../components/footer/index';
+let whiteList = ['/news', '/productdetails', '/about', '/contact', '/login', '/logon', '/product', '/userpage', '/shoppingcart'];
+import './index.less';
 /**
  * 用于判断当前路径是否是白名单
  * @param items 
@@ -26,7 +30,7 @@ function jumpPage(props: any) {
         return item.path === pathname;
     })
 
-    if ((!r || getPathIsTrue(whiteList, pathname)) && !pathname.startsWith('/news')  && pathname !== '/404') {
+    if ((!r || getPathIsTrue(whiteList, pathname)) && !pathname.startsWith('/news') && pathname !== '/404') {
         history.push('/404')
     }
 }
@@ -37,10 +41,18 @@ const index = (props: any) => {
     jumpPage(props);
 
     return (
-        <div>
-            <h1>这是布局添加的</h1>
-            {props.children}
-        </div>
+        <Layout className="page" >
+            <Header className="out-header-wrapper">
+                <MyHeader />
+            </Header>
+            <Content className="container-wrapper">
+                {props.children}
+            </Content>
+            <Footer style={{ background:'transparent'}}>
+                <MyFooter />
+            </Footer>
+        </Layout>
+
     )
 }
 export default index;

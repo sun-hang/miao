@@ -48,11 +48,12 @@
       </el-table-column>
       <el-table-column
         width="160px"
-        label="操作"
+        label="头像图片"
         header-row-class-name="thstyle"
       >
         <template slot-scope="scope">
-          <ImgBigShow :src="scope.row.imgsrc"></ImgBigShow>
+          <ImgBigShow :src="scope.row.imgsrc" v-if="scope.row.imgsrc"></ImgBigShow>
+          <span v-else>地址不存在</span>
         </template>
       </el-table-column>
     </el-table>
