@@ -13,13 +13,16 @@ export default function index() {
                 </NavLink></Col>
                 <Col>
                     <Row>
+
+
+
                         <Col>
                             <ul className="nav-box">
-                                <li className="nav-item"><NavLink to='/'></NavLink></li>
-                                <li className="nav-item"></li>
-                                <li className="nav-item"></li>
-                                <li className="nav-item"></li>
-                                <li className="nav-item"></li>
+                                <li className="nav-item"><NavLink to='/'><p>首页</p></NavLink></li>
+                                <li className="nav-item"><NavLink to='/'>产品</NavLink></li>
+                                <li className="nav-item"><NavLink to='/'>新闻</NavLink></li>
+                                <li className="nav-item"><NavLink to='/'>关于</NavLink></li>
+                                <li className="nav-item"><NavLink to='/'>联系</NavLink></li>
                             </ul>
                         </Col>
                         <Col>
