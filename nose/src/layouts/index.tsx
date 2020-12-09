@@ -48,7 +48,7 @@ const index = (props: any) => {
             <Content className="container-wrapper" >
                 {props.children}
             </Content>
-            <Footer style={{ background:'transparent'}}>
+            <Footer  style={{ background:'rgba(255,255,255,.6)'}}>
                 <MyFooter />
             </Footer>
         </Layout>

@@ -1,5 +1,6 @@
 /node_modules
 /nose/node_modules
+/nose1/node_modules
 /backstage/node_modules
 /node_modules
 /npm-debug.log*

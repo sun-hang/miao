@@ -89,25 +89,28 @@
 
   .search-box {
     .ant-input-search {
-      .ant-input-search-button{
-        background-color: transparent;
+      .ant-input-wrapper.ant-input-group {
+        .ant-input-group-addon {
+          background-color: transparent;
+          border: none;
+          bottom: 1px;
+        }
       }
+
     }
 
     input {
-      background-color: transparent;
-      border: none;
+      background-color: transparent;   
       border-bottom: 1px solid #999999;
-      outline: none;
-      box-shadow: none;
       &:focus {
         border: none;
         outline: none;
       }
     }
-    button.ant-input-search-button {
+    button {
       background-color: transparent;
       border: none;
+      border-bottom: 1px solid #999999;
     }
   }
 }

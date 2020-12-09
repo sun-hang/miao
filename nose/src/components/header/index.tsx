@@ -1,10 +1,12 @@
 import React from 'react'
-import { Link, NavLink } from 'umi';
-import { Row, Col, Input } from 'antd';
+import { Link, NavLink, history } from 'umi';
+import { Row, Col, Input, Button, Badge, Popover } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 const { Search } = Input;
 import './index.less';
 export default function index() {
-    let logSrc = require('../../../public/1.webp')
+    let logSrc = require('../../../public/1.webp');
+    console.log(history)
     return (
         <>
             <Row className="inner-header-wrapper">
@@ -28,10 +30,20 @@ export default function index() {
                 </Col>
                 <Col push={6}>
                     <div className="userinfo-box">
-
+                        <Button type="text" onClick={() => {
+                            history.push('/login')
+                        }}>登录</Button>
+                        <Button type="text" onClick={()=>{
+                            history.push('/logon')
+                        }}>注册</Button>
+                        <Popover placement="bottomRight" trigger="hover" title={"购物车"}>
+                            <Badge count={2}>
+                                <ShoppingCartOutlined style={{ fontSize: '18px' }} />
+                            </Badge>
+                        </Popover>
                     </div>
                     <div className="search-box">
-                        <Search placeholder="请输入要搜索的文字"/>
+                        <Search bordered={false} placeholder="请输入要搜索的文字" />
                     </div>
                 </Col>
             </Row>
