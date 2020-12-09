@@ -2,6 +2,11 @@
 :root,body{
     width: 100%;
     height: 100%;
+    word-spacing: normal;
+    color: rgb(141, 144, 149);
+    font-family: 微软雅黑, Helvetica, Arial, Verdana, sans-serif;
+    font-style: normal;
+    font-weight: normal;
 }
 
 div#root {

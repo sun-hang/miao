@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './index.less';
-
+import './index.less';
+const adSrc = require('../../public/ad.webp')
 const Home = () => {
   return (
-    <div>
-      <h1 className={styles.title}>Page index</h1>
+    <div className="home-wrapper">
+      <img src={adSrc} alt=""/>
     </div>
   );
 }

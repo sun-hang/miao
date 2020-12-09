@@ -45,7 +45,7 @@ const index = (props: any) => {
             <Header className="out-header-wrapper">
                 <MyHeader />
             </Header>
-            <Content className="container-wrapper">
+            <Content className="container-wrapper" >
                 {props.children}
             </Content>
             <Footer style={{ background:'transparent'}}>

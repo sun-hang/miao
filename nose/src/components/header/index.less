@@ -9,20 +9,25 @@
     height: 100%;
     line-height: 120px;
 
-    .log-img {
-      max-width: 100px;
-      max-height: 60px;
+    .log-img-box {
+      min-height: 50px;
+
+      .log-img {
+        max-height: 60px;
+      }
     }
+
   }
 
   .nav-list-box {
     display: flex;
     align-items: center;
+
     .nav-box {
       list-style: none;
       padding: 0;
       margin: 0;
-      
+
       // position: absolute;
       // top: 50%;
       // left: 50%;
@@ -35,21 +40,74 @@
 
       .nav-item {
         height: 60px;
-        padding: 0 10px;
         float: left;
         text-align: center;
         display: flex;
         align-items: center;
+        margin-right: 5px;
+        margin-left: 5px;
 
         a {
           color: #333;
+          display: block;
+          width: 100%;
+          // height: 100%;
+          max-height: 60px;
+          min-width: 80px;
+          text-align: center;
+          font-size: 15px;
+          padding: 2px 10px 3px 12px;
+          box-sizing: content-box;
+
+          &.nav-action,
+          &:hover {
+            background-color: #a0ce4e;
+
+            p {
+              color: #fff;
+
+              &:nth-of-type(2) {
+                color: #fff;
+              }
+            }
+          }
 
           p {
             margin: 0;
-            line-height: 1.5em;
+            line-height: 2em;
+            color: #4c4c4c;
+
+            &:nth-of-type(2) {
+              color: #9b9b9b;
+              font-size: 13px;
+            }
           }
         }
       }
+    }
+  }
+
+  .search-box {
+    .ant-input-search {
+      .ant-input-search-button{
+        background-color: transparent;
+      }
+    }
+
+    input {
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid #999999;
+      outline: none;
+      box-shadow: none;
+      &:focus {
+        border: none;
+        outline: none;
+      }
+    }
+    button.ant-input-search-button {
+      background-color: transparent;
+      border: none;
     }
   }
 }
@@ -62,6 +120,12 @@
     .log {
       line-height: 75px;
       position: relative;
+
+      .log-img-box {
+        .log-img {
+          max-width: 100px;
+        }
+      }
     }
   }
 }
@@ -73,6 +137,12 @@
 
     .log {
       line-height: 75px;
+
+      .log-img-box {
+        .log-img {
+          max-width: 100px;
+        }
+      }
     }
   }
 }
