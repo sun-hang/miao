@@ -1,5 +1,4 @@
-
-:root,body{
+:root, body {
     width: 100%;
     height: 100%;
     word-spacing: normal;
@@ -12,4 +11,16 @@
 div#root {
     width: 100%;
     height: 100%;
+}
+
+.user-item {
+    text-align: center;
+}
+.user-item a{
+    color: rgb(118, 173, 44);
+    display: inline-block;
+    margin: 3px 0;
+}
+.user-item a span{
+    margin-right: 3px;
 }

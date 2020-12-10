@@ -1,12 +1,29 @@
 import React from 'react'
-import { Link, NavLink, history } from 'umi';
+import { Link, NavLink, history, connect } from 'umi';
 import { Row, Col, Input, Button, Badge, Popover } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, DownOutlined, UserOutlined, PoweroffOutlined, AccountBookOutlined } from '@ant-design/icons';
 const { Search } = Input;
 import './index.less';
-export default function index() {
+
+const UserList = (<>
+    <div className="user-item">
+        <NavLink to="/userpage">
+            <UserOutlined />个人资料
+        </NavLink>
+    </div>
+    <div className="user-item">
+        <NavLink to="/shoppingcart">
+            <AccountBookOutlined />我的订单
+        </NavLink>
+    </div>
+    <div className="user-item"><NavLink to="/">
+        <PoweroffOutlined />安全退出
+    </NavLink></div>
+</>)
+
+const header = function (props: any) {
     let logSrc = require('../../../public/1.webp');
-    console.log(history)
+    let userinfo: any = props.userinfo;
     return (
         <>
             <Row className="inner-header-wrapper">
@@ -30,12 +47,16 @@ export default function index() {
                 </Col>
                 <Col push={6}>
                     <div className="userinfo-box">
-                        <Button type="text" onClick={() => {
-                            history.push('/login')
-                        }}>登录</Button>
-                        <Button type="text" onClick={()=>{
-                            history.push('/logon')
-                        }}>注册</Button>
+                        {(userinfo == null ? (<>
+                            <Button type="text" onClick={() => {
+                                history.push('/login')
+                            }}>登录</Button>
+                            <Button type="text" onClick={() => {
+                                history.push('/logon')
+                            }}>注册</Button>
+                        </>) : (<Popover className="userinfo-popover" content={UserList} trigger="click">
+                            <Button type="text">{userinfo.loginUser} <DownOutlined style={{ fontSize: '10px' }} /></Button>
+                        </Popover>))}
                         <Popover placement="bottomRight" trigger="hover" title={"购物车"}>
                             <Badge count={2}>
                                 <ShoppingCartOutlined style={{ fontSize: '18px' }} />
@@ -50,3 +71,11 @@ export default function index() {
         </>
     )
 }
+
+const mapStateToProps = (state: any) => {
+    return {
+        userinfo: state.userinfo.userinfo
+    }
+}
+
+export default connect(mapStateToProps)(header);
