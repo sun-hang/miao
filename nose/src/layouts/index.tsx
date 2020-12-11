@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'umi';
-import { Layout } from 'antd';
+import { Layout, BackTop } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 import MyHeader from '../components/header/index';
 import MyFooter from '../components/footer/index';
@@ -47,12 +47,22 @@ const index = (props: any) => {
             </Header>
             <Content className="container-wrapper" >
                 {props.children}
+                <BackTop visibilityHeight={200} style={{right:"0",top:'0',bottom:"0",margin:"auto"}}><div style={{
+                    height: 40,
+                    width: 40,
+                    lineHeight: '40px',
+                    borderRadius: 4,
+                    backgroundColor: '#1088e9',
+                    color: '#fff',
+                    textAlign: 'center',
+                    fontSize: 14,
+                }}>UP</div></BackTop>
             </Content>
-            <Footer  style={{ background:'rgba(255,255,255,.6)'}}>
+            <Footer style={{ background: 'rgba(255,255,255,.6)' }}>
                 <MyFooter />
             </Footer>
-        </Layout>
 
+        </Layout>
     )
 }
 export default index;

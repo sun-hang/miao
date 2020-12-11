@@ -1,0 +1,67 @@
+.contact-wrapper {
+  text-align: center;
+  width: 100%;
+  padding: 80px 40px 100px;
+  .contact-container{
+      width: 100%;
+      background-color: #fff;
+      position: relative;
+      .contact-inner-wrapper{
+          position: relative;
+          padding: 60px 50px 0px;
+          h1{
+            font-family: 微软雅黑;
+            font-size: 30px;
+            color: #1e1e1e;
+            padding: 0 0 2px 0;
+            margin: 0;
+          }
+          .mintitle{
+              line-height: 1.5em;
+              color: #666;
+          }
+          .items{
+              display: flex;
+              align-items: center;
+              padding-top: 60px;
+              .item{
+                  width: 25%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-direction: column;
+                  .icon-wrapper{
+                      width: 80px;
+                      height: 80px;
+                      border-radius: 50%;
+                      border: 1px solid  rgb(96, 143, 36);
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      .icon{
+                          font-size: 32px;
+                          color: rgb(96, 143, 36);
+                      }
+                  }
+                  .text-wrapper{
+                      margin-top: 10px;
+                      color: rgb(51, 51, 51);
+                      font-size: 15px;
+                  }
+              }
+          }
+      }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contact-wrapper {
+    padding: 0;
+  }
+}
+
+@media only screen and (max-width: 992px) and (min-width: 768px) {
+  .contact-wrapper {
+    padding: 0;
+  }
+}
