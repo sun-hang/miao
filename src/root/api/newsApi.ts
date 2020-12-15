@@ -36,7 +36,7 @@ function verify(item: newsDAOType, keys: string[]) {
         return 'ctime 属性不存在'
     }
 
-    if (!item.imgsrc || !/^.+(\.jpg|\.png|\.jpeg|\.gif)$/.test(item.imgsrc)) {
+    if (!item.imgsrc || !/^.+(\.jpg|\.png|\.jpeg|\.gif|\.webp)$/.test(item.imgsrc)) {
         return "imgsrc 属性不存在或格式不正确"
     }
 

@@ -182,22 +182,7 @@
             >修改</el-button
           >
           <DelButtonComponent :item="scope.row" @change="yesDel" />
-          <el-button
-            type="primary"
-            size="mini"
-            style="margin: 0 10px 0 0"
-            @click="showProductData"
-            >查看产品参数</el-button
-          >
-          <el-dialog :title="scope.row.productName + '参数列表'" :visible.sync="dialogFormVisible">
-            <ProductDataView :id="scope.row.id"></ProductDataView>
-            <div slot="footer" class="dialog-footer">
-              <!-- <el-button @click="dialogFormVisible = false">取 消</el-button> -->
-              <el-button type="primary" @click="dialogFormVisible = false"
-                >确 定</el-button
-              >
-            </div>
-          </el-dialog>
+         <ProductDataConnect :id="scope.row.id" :item="scope.row"/>
         </template>
       </el-table-column>
     </el-table>
@@ -215,6 +200,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import ProductDataConnect from "../../components/list/productDataConnect/productDataConnect.vue";
 import ProductDataView from "./ProductData.vue";
 import TableTdTagComponent from "../../components/list/TableTdTagComponent.vue";
 import SearchInputComponent from "../../components/list/SearchInputComponent.vue";
@@ -298,10 +284,7 @@ export default Vue.extend({
     },
     searchClick(option: string) {
       this.searchStr = option;
-    },
-    showProductData() {
-      this.dialogFormVisible = true;
-    },
+    }
   },
   mounted() {
     fetch("/api/product", {
@@ -319,6 +302,7 @@ export default Vue.extend({
     SearchInputComponent,
     TableTdTagComponent,
     ProductDataView,
+    ProductDataConnect,
   },
 });
 </script>

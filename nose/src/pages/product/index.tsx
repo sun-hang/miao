@@ -1,9 +1,83 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import './index.less';
+import { Tag } from 'antd';
+import NavItem from '../../components/productComp/navItem';
+
+/**
+ * 获取标签的钩子函数
+ */
+const useTags = () => {
+    let arr: any[] = [];
+    const [tags, setTags] = useState(arr);
+    useEffect(() => {
+        fetch('/api/tags').then(res => res.json()).then(res => {
+            if (res.data) {
+                setTags(res.data);
+            }
+        })
+    }, [""])
+    return [tags, setTags]
+}
+
 
 export default function index() {
+
+    // 定义标签dom数组
+    let tagDoms: any[] = [];
+
+    // 筛选条件的状态
+    const [select, setSelect] = useState(tagDoms);
+
+    // 使用自定义获取标签钩子函数
+    const [tags, setTags] = useTags();
+
+    // 标签映射dom
+    if (Array.isArray(tags)) {
+        tagDoms = tags.map((item, index) => {
+            return (<NavItem title={item.name} tags={item.tags} key={item.name} select={select[index]} onChange={(item) => {
+                select[index] = item;
+                setSelect([...select]);
+            }}></NavItem>)
+        })
+    }
+
+    // 映射选中dom
+    let selectDom = select.map((item, index) => {
+        if (!item) {
+            return ''
+        }
+        return (<Tag key={index} closable onClose={() => {
+            select[index] = '';
+            setSelect([...select]);
+        }}>{item}</Tag>)
+    })
+
     return (
-        <div>
-            <h1>这是产品页面</h1>
+        <div className="product-wrapper">
+            <div className="product-filter">
+                <div className="title">
+                    <h1>所有产品</h1>
+                    <p className="mintitle">
+                        温柔小方的杂货小铺
+                    </p>
+                </div>
+                <div className="filter-wrapper">
+                    {tagDoms}
+                    <NavItem select={select[3]} title="价格" tags={[{ name: '0-50' }, { name: '50-100' }, { name: '100-200' }, { name: '200-500' }, { name: '500-1000' }, { name: '1000-2000' }, { name: '2000+' }]} onChange={(item) => {
+                        select[3] = item;
+                        setSelect([...select])
+                    }} />
+                    <div className="select-box">
+                        <div className="left-title"><div><span>选中条件：</span></div></div>
+                        <div style={{ width: '84%', lineHeight: '41px' }}>{selectDom}</div>
+                    </div>
+                </div>
+            </div>
+            <div className="product-list-wrapper">
+                <div className="list-container">
+
+                </div>
+            </div>
         </div>
     )
 }

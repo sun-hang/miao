@@ -4,7 +4,6 @@ const router: Router = Router();
 import jimp from 'jimp';
 import multer from 'multer';
 import path from 'path';
-import { ne } from 'sequelize/types/lib/operators';
 import { getResObj } from '../util';
 let storage = multer.diskStorage({
     destination(req, file, cd) {
@@ -48,7 +47,6 @@ router.post('/images', uploadImage.array('image', 16), async (req, res, next) =>
 })
 
 router.post('/file', uploadImage.array('files', 16), async (req, res, next) => {
-    console.log(111);
     handler(req, res, next);
 })
 

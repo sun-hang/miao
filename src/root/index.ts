@@ -16,7 +16,7 @@ app.use(cors({
         cd(null, true)
     },
     credentials: true,
-    methods:['GET','POST']
+    methods: ['GET', 'POST']
 }))
 
 // 解析cookie中间件
@@ -102,6 +102,7 @@ app.use('/api/updata', require('./api/updataFileApi').default)
 // 用户地址处理路由
 app.use('/api/useraddress', require('./api/userAddressApi').default);
 
+app.use('/api/tags', require('./api/tagsApi').default)
 // 错误处理中间件
 app.use(require('./errorMiddleware').default)
 

@@ -4,6 +4,7 @@ import { Layout, BackTop } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 import MyHeader from '../components/header/index';
 import MyFooter from '../components/footer/index';
+import { tMapInit } from '../utils/tmapUtil'
 let whiteList = ['/news', '/productdetails', '/about', '/contact', '/login', '/logon', '/product', '/userpage', '/shoppingcart'];
 import './index.less';
 /**
@@ -36,9 +37,14 @@ function jumpPage(props: any) {
 }
 
 
-const index = (props: any) => {
 
+
+const index = (props: any) => {
+    // 如果路径不存在进行跳转404页面
     jumpPage(props);
+
+    // 腾讯地图加载
+    // tMapInit();
 
     return (
         <Layout className="page" >
@@ -47,7 +53,7 @@ const index = (props: any) => {
             </Header>
             <Content className="container-wrapper" >
                 {props.children}
-                <BackTop visibilityHeight={200} style={{right:"0",top:'0',bottom:"0",margin:"auto"}}><div style={{
+                <BackTop visibilityHeight={200} style={{ right: "0", top: '0', bottom: "0", margin: "auto" }}><div style={{
                     height: 40,
                     width: 40,
                     lineHeight: '40px',

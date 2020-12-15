@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    function initMap() {
+      var center = new TMap.LatLng(34.61505750245571, 112.46432933729551);
+      var map = new TMap.Map("tmap-box", {
+        pitch: 45,
+        zoom: 17.2,
+        center
+      });
+
+      var marker = new TMap.MultiMarker({
+        id: "marker-layer", //图层id
+        map: map,
+        styles: { //点标注的相关样式
+          "marker": new TMap.MarkerStyle({
+            "width": 25,
+            "height": 35,
+            "anchor": {
+              x: 16,
+              y: 32
+            },
+            "src": "https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png"
+          })
+        },
+        geometries: [{ //点标注数据数组
+          "id": "demo",
+          "styleId": "marker",
+          "position": new TMap.LatLng(34.61505750245571, 112.46432933729551),
+          "properties": {
+            "title": "marker"
+          }
+        }]
+      });
+
+      var label = new TMap.MultiLabel({
+        id: 'label-layer',
+        map: map,
+        styles: {
+          'label': new TMap.LabelStyle({
+            'color': '#3777FF', //颜色属性
+            'size': 20, //文字大小属性
+            'offset': {
+              x: 0,
+              y: -50
+            }, //文字偏移属性单位为像素
+            'angle': 0, //文字旋转属性
+            'alignment': 'center', //文字水平对齐属性
+            'verticalAlignment': 'middle' //文字垂直对齐属性
+          })
+        },
+        geometries: [{
+          'id': 'label', //点图形数据的标志信息
+          'styleId': 'label', //样式id
+          'position': center, //标注点位置
+          'content': '小方杂货铺', //标注文本
+          'properties': { //标注点的属性数据
+            'title': 'label'
+          }
+        }]
+      });
+    }
+
+  </script>
+</body>
+
+</html>

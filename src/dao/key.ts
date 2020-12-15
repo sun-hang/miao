@@ -7,6 +7,15 @@ import { CommentDAO } from './commentDAO'; //评论表
 import { ShoppingCartDAO } from './shoppingCartDAO'; //购物车表
 import { PurchaseLogDAO } from './purchaseLogDAO'; //购物记录表
 import { NewsDAO } from './newsDAO'; //新闻表
+import { ProductTagsDAO } from './productTagsDao';
+import { TagDAO } from './tagsDao';
+
+/**
+ * 标签表和标签列进行关联
+ */
+
+ ProductTagsDAO.hasMany(TagDAO);
+ TagDAO.belongsTo(ProductTagsDAO);
 
 /**
  * 用户和用户地址进行关联

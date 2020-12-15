@@ -23,6 +23,10 @@ require('./smallAdDAO');
 require('./userAddressDAO');
 // 用户表 
 require('./userAdminDAO');
+// 标签列表表
+require('./productTagsDao');
+// 产品标签页
+require('./tagsDao');
 
 const sequelize: Sequelize = require('./index');
 
