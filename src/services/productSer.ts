@@ -83,15 +83,22 @@ export const findById = async (id: number): Promise<ProductDAOType | null> => {
     return null;
 }
 /**
- * 根据标签
+ * 根据标签或者名字
  */
-export const findByTag = async (tag: string): Promise<ProductDAOType[]> => {
+export const findByTagAndName = async (tag: string = '', name: string = ''): Promise<ProductDAOType[]> => {
     tag = '%' + tag + '%';
+    name = '%' + name + '%';
     const result = await ProductDAO.findAll({
         where: {
-            tag: {
-                [Op.like]: tag
-            }
+            [Op.or]: [{
+                tag: {
+                    [Op.like]: tag
+                }
+            }, {
+                productName: {
+                    [Op.like]: name
+                }
+            }]
         }
     })
     return JSON.parse(JSON.stringify(result));
@@ -99,25 +106,41 @@ export const findByTag = async (tag: string): Promise<ProductDAOType[]> => {
 /**
  * 分页查询+标签
  */
-export const findByPageAndTag = async (page: number = 1, size: number = 10, tag?: string, name?: string): Promise<{ count: number, rows: ProductDAOType[] }> => {
+export const findByPageAndTag = async (page: number = 1, size: number = 10, tag: string = '', start?: number, end?: number): Promise<{ count: number, rows: ProductDAOType[] }> => {
     let where: any = {};
-    tag = tag ? tag : '';
-    name = name ? name : '';
-    if (tag) {
-        tag = '%' + tag + '%';
-        name = "%" + name + "%";
-        where[Op.or] = [{
-            tag: {
-                [Op.like]: tag
+    tag = '%' + tag + '%';
+    if (start && end) {
+        where[Op.and] = [
+            {
+                nowPrice: {
+                    [Op.and]: {
+                        [Op.gte]: start,
+                        [Op.lte]: end
+                    }
+                }
+            }, {
+                tag: {
+                    [Op.like]: tag
+                }
             }
-        }, {
-            name: {
-                [Op.like]: name
+        ]
+    } else if (start) {
+        where[Op.and] = [
+            {
+                nowPrice: {
+                    [Op.gte]: start
+                }
+            }, {
+                tag: {
+                    [Op.like]: tag
+                }
             }
-        }]
+        ]
+    } else {
+        where.tag = { [Op.like]: tag }
     }
 
-    const result = await ProductDAO.findAll({
+    const result = await ProductDAO.findAndCountAll({
         where,
         limit: size,
         offset: (page - 1) * size

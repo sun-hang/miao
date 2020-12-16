@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './index.less';
-import { Tag } from 'antd';
+
+import { Tag, Empty, Spin, Pagination } from 'antd';
 import NavItem from '../../components/productComp/navItem';
+
+import ProductItemDmo from '../../components/productComp/productItem';
 
 /**
  * 获取标签的钩子函数
@@ -22,11 +25,33 @@ const useTags = () => {
 
 export default function index() {
 
+    const [isLoading, setIsLoading] = useState(false);
+
     // 定义标签dom数组
     let tagDoms: any[] = [];
 
     // 筛选条件的状态
     const [select, setSelect] = useState(tagDoms);
+
+    // 定义产品列表
+    const [productList, setProductList] = useState(tagDoms);
+
+    let productListDom = productList.map((item, index) => {
+        return (<ProductItemDmo key={index} item={item}></ProductItemDmo>)
+    })
+
+    // 获取产品数据
+    useEffect(() => {
+        setIsLoading(true);
+        fetch('/api/product', {
+            credentials: 'include'
+        }).then(res => res.json()).then(res => {
+            if (res.data) {
+                setProductList(res.data);
+            }
+            setIsLoading(false);
+        })
+    }, [select[0], select[1], select[2], select[3]])
 
     // 使用自定义获取标签钩子函数
     const [tags, setTags] = useTags();
@@ -52,6 +77,10 @@ export default function index() {
         }}>{item}</Tag>)
     })
 
+    const onShowSizeChange = (current: number, pageSize: number) => {
+
+    }
+
     return (
         <div className="product-wrapper">
             <div className="product-filter">
@@ -75,7 +104,18 @@ export default function index() {
             </div>
             <div className="product-list-wrapper">
                 <div className="list-container">
-
+                    <Spin size='large' spinning={isLoading} className="loading" />
+                    <div className="list-inner-container">
+                        {productListDom.length > 0 ? productListDom : (<Empty />)}
+                    </div>
+                    <div className="find-page">
+                        <Pagination
+                            
+                            onShowSizeChange={onShowSizeChange}
+                            defaultCurrent={3}
+                            total={500}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

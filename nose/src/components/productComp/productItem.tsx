@@ -35,10 +35,10 @@ const productItem: React.FC<productItemType> = (props) => {
                 <div className="product-text-box">
                     <div className="price-box">
                         <span className="now-price">
-                            {props.item.nowPrice}
+                            ￥{props.item.nowPrice.toFixed(2)}
                         </span>
                         <span className='original-price'>
-                            {props.item.originalPrice}
+                            ￥{props.item.originalPrice.toFixed(2)}
                         </span>
                     </div>
                     <div className="product-name-box">

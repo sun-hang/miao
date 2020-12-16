@@ -1,10 +1,10 @@
 import React from 'react'
 import { useHistory } from 'umi';
-import { Layout, BackTop } from 'antd';
+import { Layout, BackTop, ConfigProvider } from 'antd';
+import zhCN from 'antd/lib/locale/zh_CN'
 const { Header, Footer, Sider, Content } = Layout;
 import MyHeader from '../components/header/index';
 import MyFooter from '../components/footer/index';
-import { tMapInit } from '../utils/tmapUtil'
 let whiteList = ['/news', '/productdetails', '/about', '/contact', '/login', '/logon', '/product', '/userpage', '/shoppingcart'];
 import './index.less';
 /**
@@ -31,7 +31,7 @@ function jumpPage(props: any) {
         return item.path === pathname;
     })
 
-    if ((!r || getPathIsTrue(whiteList, pathname)) && !pathname.startsWith('/news') && pathname !== '/404') {
+    if ((!r || getPathIsTrue(whiteList, pathname)) && pathname !== '/404') {
         history.push('/404')
     }
 }
@@ -47,28 +47,29 @@ const index = (props: any) => {
     // tMapInit();
 
     return (
-        <Layout className="page" >
-            <Header className="out-header-wrapper">
-                <MyHeader />
-            </Header>
-            <Content className="container-wrapper" >
-                {props.children}
-                <BackTop visibilityHeight={200} style={{ right: "0", top: '0', bottom: "0", margin: "auto" }}><div style={{
-                    height: 40,
-                    width: 40,
-                    lineHeight: '40px',
-                    borderRadius: 4,
-                    backgroundColor: '#1088e9',
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontSize: 14,
-                }}>UP</div></BackTop>
-            </Content>
-            <Footer style={{ background: 'rgba(255,255,255,.6)' }}>
-                <MyFooter />
-            </Footer>
-
-        </Layout>
+        <ConfigProvider locale={zhCN}>
+            <Layout className="page" >
+                <Header className="out-header-wrapper">
+                    <MyHeader />
+                </Header>
+                <Content className="container-wrapper" >
+                    {props.children}
+                    <BackTop visibilityHeight={200} style={{ right: "0", top: '0', bottom: "0", margin: "auto" }}><div style={{
+                        height: 40,
+                        width: 40,
+                        lineHeight: '40px',
+                        borderRadius: 4,
+                        backgroundColor: '#1088e9',
+                        color: '#fff',
+                        textAlign: 'center',
+                        fontSize: 14,
+                    }}>UP</div></BackTop>
+                </Content>
+                <Footer style={{ background: 'rgba(255,255,255,.6)' }}>
+                    <MyFooter />
+                </Footer>
+            </Layout>
+        </ConfigProvider>
     )
 }
 export default index;

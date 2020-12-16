@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ProductDAOType } from '../../dao/productDAO';
 import { findByTagName, add } from '../../services/tagSer'
-import { addMore, addOne, removeMore, removeOne, updata, findAll, findById, findByPageAndTag, findByTag } from '../../services/productSer';
+import { addMore, addOne, removeMore, removeOne, updata, findAll, findById, findByPageAndTag, findByTagAndName } from '../../services/productSer';
 import { delHandler, delMoreHandler, getHandler, getIdHandler, getResObj, postHandler, putHandler } from '../util';
 const router = Router();
 
@@ -10,19 +10,21 @@ router.get('/', async (req, res, next) => {
     let name: string = req.query.name ? req.query.name as string : "";
     let page = parseInt(req.query.page as string);
     let size = parseInt(req.query.size as string);
-
+    let start = req.query.start ? +req.query.start : 0;
+    let end = req.query.end ? +req.query.end : 0;
     // 分页查询
     if (page > 0 && size > 0) {
-        const result = await findByPageAndTag(page, size, tag, name);
+        const result = await findByPageAndTag(page, size, tag, start, end);
         res.json(getResObj(200, "请求成功", result));
     } else {
         const result = await findAll();
         res.json(getResObj(200, "请求成功", result));
     }
 })
-router.get('/tag', async (req, res, next) => {
+router.get('/tagandname', async (req, res, next) => {
     let tag = req.query.tag as string;
-    const result = await findByTag(tag);
+    let name = req.query.name as string;
+    const result = await findByTagAndName(tag, name);
     res.json(getResObj(200, "请求成功", result));
 })
 
